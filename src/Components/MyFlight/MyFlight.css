@@ -1,0 +1,114 @@
+/* Container styling */
+.flight-status-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Title styling */
+.flight-title {
+    color: whitesmoke;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Flight details styling */
+.flight-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Location details */
+.flight-location {
+    flex: 1;
+    text-align: center;
+    
+}
+
+.flight-location h3 {
+    font-weight: bold;
+    color: #333;
+}
+
+.flight-location p {
+    margin: 5px 0;
+    color: #606060;
+}
+
+.flight-location strong {
+    font-size: 1.2em;
+    color: #333;
+}
+
+.flight-location span {
+    display: block;
+    font-size: 1.1em;
+    color: #333;
+    margin-top: 5px;
+}
+
+/* Timeline styling */
+.flight-timeline {
+    position: relative;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flight-timeline .dot {
+    height: 10px;
+    width: 10px;
+    background-color: green;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.flight-timeline hr {
+    border: 1px solid green;
+    width: 100%;
+}
+
+.flight-timeline .fa-plane {
+    color: green;
+    font-size: 1.5em;
+    position: absolute;
+    right: 5px;
+}
+
+/* Status button styling */
+.status {
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+}
+
+.status.arrived {
+    background-color: #d4edda;
+    color: #155724;
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    margin-right: 20px;
+}
+
+.status.delayed {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status.scheduled {
+    background-color: #fff3cd;
+    color: #856404;
+}

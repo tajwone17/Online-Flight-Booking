@@ -1,0 +1,77 @@
+
+@font-face {
+    font-family: 'product sans';
+    src: url('../../Assets/Css/Product\ Sans\ Bold.ttf');
+  }
+
+
+  button.btn-outline-light:hover {
+    color: cornflowerblue !important;
+  }
+  
+  .navbar{
+    background-color: #3a3a3a;
+    font-family: 'product sans', cursive;
+   
+
+
+  } 
+  
+  h4 {
+    font-size: 23px !important;
+  }
+  .astext {
+    background:none;
+    border:none;
+    margin:0;
+    padding:0;
+    cursor: pointer;
+}    
+
+/* h5:hover {
+  position: relative;
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: color 0.3s ease-in-out;
+} */
+h5 {
+    color: white;
+    font-weight: bold;
+    font-size: 20px ;
+	font-family: 'Montserrat', sans-serif;
+}
+.btn-login {
+    /* font-size: 22px ; */
+    font-weight: bold;
+	font-family: 'Montserrat', sans-serif;    
+}
+.navbar h5 {
+  position: relative;
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar h5::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: cornflowerblue;
+  transition: width 0.3s ease-in-out;
+}
+
+.navbar h5:hover {
+  color: cornflowerblue;
+}
+
+.navbar h5:hover::after {
+  width: 100%;
+}
+.dropdown{
+  margin-right: 80px;
+}

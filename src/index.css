@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  height: 100vh;
+  background: #000000; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #434343,
+    #000000
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #434343,
+    #000000
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat", sans-serif;
+}
+h5.text-light {
+  margin-top: 10px;
+}
+@font-face {
+  font-family: "product sans";
+  src: url("../src/Assets/Css/Product\ Sans\ Bold.ttf");
+}
+h1 {
+  font-family: "product sans" !important;
+  color: cornflowerblue;
+  font-size: 50px;
+  margin-top: 50px;
+  text-align: center;
+}

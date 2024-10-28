@@ -1,0 +1,257 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.con {
+  height: 400px;
+  width: 750px;
+  border: none;
+  
+  color: #3b3355;
+}
+.heading-container {
+  height: 60px;
+  width: 750px;
+  display: flex;
+
+  color: white;
+  border: none;
+  text-align: center;
+  color: white;
+
+  font-size: 20px;
+}
+.right {
+  border: none;
+  height: 60px;
+  width: 375px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #95a3b3;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+}
+.left {
+  height: 60px;
+  width: 375px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #95a3b3;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+}
+.left:hover {
+  color: white;
+  transform: scale(1);
+}
+.right:hover {
+  color: white;
+  transform: scale(1);
+}
+
+.form-body {
+  /* background: #5d5d81; */
+/* 
+  background: #485563;  
+background: -webkit-linear-gradient(to bottom, #29323c, #485563);  
+background: linear-gradient(to bottom, #29323c, #485563);  */
+background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+border: none; /* Light border for definition */
+ /* White text color for contrast */
+  height: 340px;
+  width: 750px;
+}
+.from-to {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  position: relative;
+}
+.from,
+.to
+ {
+  margin-top: 8px;
+  padding: 10px;
+  
+}
+.class {
+
+  padding: 10px;
+  
+}
+.from {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+/* .to {
+  align-self: flex-start;
+ 
+} */
+.return,
+.depart,
+.class {
+  padding: 10px;
+  width: 20%;
+}
+
+.date {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  position: relative;
+}
+.numofppl {
+  display: flex;
+  justify-content: space-evenly;
+
+  padding: 10px;
+}
+
+.adults h3 {
+  color: rgba(255, 255, 255, 0.767);
+  margin-bottom: 8px;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-select {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-select .entry {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+}
+
+.quantity-select .value {
+  font-size: 16px;
+  font-weight: bold;
+  
+}
+
+.value-minus,
+.value-plus {
+  color: #333;
+
+}
+
+.button {
+  background-color: #2d3047;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background-color: #2d3047;
+  transform: scale(1.05);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+.button {
+  background: #2d3047;
+  color: white;
+}
+.entry {
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
+  justify-content: center;
+  justify-items: center;
+}
+/* Home.css */
+.form-control,
+.frm-field {
+  width: 100%; /* Set width to 100% of the parent */
+  padding: 10px; /* Optional: Adjust padding for better appearance */
+  margin-bottom: 15px; /* Space between fields */
+  border: 1px solid #ccc; /* Optional: Border styling */
+  border-radius: 4px; /* Optional: Rounded corners */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.from-to {
+  display: flex;
+  justify-content: space-between; /* Space out the fields */
+}
+
+.date {
+  display: flex;
+  justify-content: space-between; /* Space out the date fields */
+}
+.intro {
+  background-color: rgba(255, 255, 255, 0.9); /* Light background with slight transparency */
+  backdrop-filter: blur(10px); /* Optional: gives a glassy, blurred effect behind the form */
+  border-radius: 10px; /* Smooth rounded corners */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Soft shadow for elevation */
+  text-align: center;
+  margin-top: 150px;
+  margin-bottom: 120px;
+  margin-left: 30px;
+  margin-right: 30px;
+  width: 100%;
+  height: 350px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  gap: 10px;
+}
+.intro-con {
+  display: flex;
+  justify-content: center;
+  border-radius: 40px;
+  flex-direction: row;
+}
+img {
+  width: 50px;
+  height: auto;
+}
+.des {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  margin: 100px;
+}
+.intro_content {
+  display: flex;
+  flex-direction: column;
+}
+.intro_icon {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+.intro_title,
+.intro_subtitle {
+  text-align: left;
+}
+.intro_title {
+  font-weight: bold;
+}
