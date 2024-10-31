@@ -1,4 +1,4 @@
-// TicketComponent.js
+
 import React from 'react';
 import './Ticket.css';
 import airtic from '../../Assets/Images/airtic.png'
