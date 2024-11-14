@@ -1,0 +1,97 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+.add-flight-container {
+  width: 60%; /* Reduced width to make the form smaller */
+  margin: 0 auto;
+  margin-top:30px;
+  background-color: #efefef;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 40px; /* Slightly smaller font size */
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  margin-bottom: 20px;
+  color:#009688;
+}
+
+.flight-form {
+  background-color: whitesmoke;
+  padding: 30px; /* Reduced padding for compact form */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 10px 15px rgba(0, 0, 0, 0.1); /* Different shadow */
+  border-radius: 8px; /* Rounded corners */
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.col {
+  width: 48%;
+}
+
+input, select {
+  /* background: none; */
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #505050; 
+  color: #505050;
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+input:focus,
+select:focus {
+  border-bottom: 2px solid #009688; /* Color change on focus */
+  box-shadow: 0 2px 5px rgba(0, 150, 136, 0.3); /* Shadow effect on focus */
+}
+
+input::placeholder,
+select::placeholder {
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* .input-group {
+  position: relative;
+  width: 100%;
+}
+
+.input-group input {
+  padding-left: 10px;
+  padding-top: 8px;
+} */
+
+h5.form-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+button.btn-submit {
+  background-color: #009688;
+  color: white;
+  font-size: 1.2rem;
+  padding: 12px 20px;
+  width: 100%;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button.btn-submit i {
+  margin-right: 10px;
+}
+
+button.btn-submit:hover {
+  background-color: #00796b;
+}

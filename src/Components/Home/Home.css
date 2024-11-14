@@ -147,7 +147,6 @@ border: none; /* Light border for definition */
 .quantity-select .value {
   font-size: 16px;
   font-weight: bold;
-  
 }
 
 .value-minus,
@@ -167,16 +166,20 @@ border: none; /* Light border for definition */
   transition: all 0.3s ease;
 }
 
+.button.danger{
+  background-color: red;
+}
+
 .button:hover {
   background-color: #2d3047;
   transform: scale(1.05);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   color: white;
 }
-.button {
+/* .button {
   background: #2d3047;
   color: white;
-}
+} */
 .entry {
   font-size: 30px;
   text-align: center;

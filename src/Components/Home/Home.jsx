@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import axios from "axios";
 import "./Home.css";
 import airtic from "../../Assets/Images/airtic.png";
 import beach from "../../Assets/Images/beach.svg";
@@ -7,7 +8,25 @@ import wallet from "../../Assets/Images/wallet.svg";
 import Footer from '../../Components/Footer/Footer'
 const Home = () => {
   const [roundTrip, setRoundTrip] = useState(true);
-  const cities = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"];
+  const [cities, setCities] = useState([]);
+  useEffect(() => {
+    const fetchCitiesAndAirlines = async () => {
+      try {
+        const cityResponse = await axios.get(
+          "http://localhost:3001/api/cities"
+        );
+
+        setCities(cityResponse.data.cities);
+       
+
+
+      } catch (error) {
+        console.error("Error fetching cities", error);
+      }
+    };
+
+    fetchCitiesAndAirlines();
+  }, []);
 
   let [value, setvalue] = useState(0);
   const handlePlus = () => {
