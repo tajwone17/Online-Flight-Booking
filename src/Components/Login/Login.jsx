@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import Footer from '../Footer/Footer';
+
 import './Login.css';
 import validateInput from './Validations';
 
@@ -26,11 +26,11 @@ const Login = () => {
     
         try {
             const response = await axios.post("http://localhost:3001/auth/login", formData);
-            const { token, username } = response.data;  // Assuming `username` is returned in the response data
+            const { token, username } = response.data; 
             localStorage.setItem("token", token);
-            localStorage.setItem("username", username);  // Store the username in localStorage
+            localStorage.setItem("username", username);
     
-            navigate("/"); // Redirect to a dashboard or home page after login
+            navigate("/"); 
             window.location.reload();
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -102,7 +102,7 @@ const Login = () => {
                     </form>
                 </div>
             </div>
-            <Footer />
+            
         </>
     );
 };

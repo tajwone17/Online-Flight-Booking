@@ -58,17 +58,17 @@ h5 {
   bottom: 0;
   width: 0;
   height: 2px;
-  background-color: cornflowerblue;
+  background-color: #00796b;
   transition: width 0.3s ease-in-out;
 }
 
 .navbar h5:hover {
-  color: cornflowerblue;
+  color: #00796b;
 }
 
 .navbar h5:hover::after {
   width: 100%;
 }
-.dropdown{
+/* .dropdown{
   margin-right: 80px;
-}
+} */

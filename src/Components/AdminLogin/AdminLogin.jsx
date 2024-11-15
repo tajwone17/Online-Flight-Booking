@@ -25,7 +25,7 @@ const AdminLogin = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("admin_uname", admin_uname); 
       
-      navigate('/admin'); // Redirect to admin dashboard
+      navigate('/admin/dashboard'); // Redirect to admin dashboard
       window.location.reload();
     } catch (error) {
       alert("Invalid username/email or password.");
@@ -42,6 +42,7 @@ const AdminLogin = () => {
             <div className="input-icon">
               <i className="fas fa-user"></i>
               <input 
+              style={{padding:" 10px 10px 10px 100px"}}
                 type="text" 
                 id="user_id" 
                 value={user_id} 
@@ -55,6 +56,7 @@ const AdminLogin = () => {
             <div className="input-icon">
               <i className="fas fa-lock"></i>
               <input 
+              style={{padding:" 10px 10px 10px 100px"}}
                 type="password" 
                 id="password" 
                 value={password} 

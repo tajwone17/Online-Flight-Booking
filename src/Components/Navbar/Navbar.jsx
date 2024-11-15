@@ -66,7 +66,7 @@ const Navbar = () => {
         </ul>
 
         {!isLoggedIn ? (
-          <div className="dropdown">
+          <div className="dropdown" style={{marginRight:'80px'}}>
             <button
               className="button btn-secondary dropdown-toggle"
               type="button"

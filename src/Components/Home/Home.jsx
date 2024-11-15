@@ -1,46 +1,61 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Home.css";
 import airtic from "../../Assets/Images/airtic.png";
 import beach from "../../Assets/Images/beach.svg";
 import suitcase from "../../Assets/Images/suitcase.svg";
 import wallet from "../../Assets/Images/wallet.svg";
-import Footer from '../../Components/Footer/Footer'
+import Footer from '../../Components/Footer/Footer';
+import { useNavigate } from "react-router-dom";
+
 const Home = () => {
   const [roundTrip, setRoundTrip] = useState(true);
   const [cities, setCities] = useState([]);
+  const [formData, setFormData] = useState({
+    dep_city: "",
+    arr_city: "",
+    dep_date: "",
+    ret_date: "",
+    f_class: "E",
+    passengers: 0, // Added passengers count
+  });
+
+  const [value, setValue] = useState(0); // Track the number of passengers
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const fetchCitiesAndAirlines = async () => {
+    const fetchCities = async () => {
       try {
-        const cityResponse = await axios.get(
-          "http://localhost:3001/api/cities"
-        );
-
+        const cityResponse = await axios.get("http://localhost:3001/api/cities");
         setCities(cityResponse.data.cities);
-       
-
-
       } catch (error) {
         console.error("Error fetching cities", error);
       }
     };
-
-    fetchCitiesAndAirlines();
+    fetchCities();
   }, []);
 
-  let [value, setvalue] = useState(0);
-  const handlePlus = () => {
-    setvalue(value + 1);
+  const handlePlus = () => setValue(value + 1);
+  const handleMinus = () => value > 0 && setValue(value - 1);
+
+  const handleTripChange = () => setRoundTrip(false);
+  const handleTripChangeRT = () => setRoundTrip(true);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleMinus = () => {
-    if (value > 0) setvalue(value - 1);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSearch();
   };
-  const handleTripChange = () => {
-    setRoundTrip(false);
-  };
-  const handleTripChangeRT = () => {
-    setRoundTrip(true);
-  };
+
+  const handleSearch = () => {
+    const updatedFormData = { ...formData, passengers: value };
+    navigate('/searchResults', { state: updatedFormData });
+};
+
+
   return (
     <>
       <div className="main-agileinfo">
@@ -48,7 +63,7 @@ const Home = () => {
           <img src={airtic} height="105px" width="105px" alt="" />
           Online Flight Booking
         </h1>
-
+        
         <div className="main">
           <div className="con">
             <div className="heading-container">
@@ -60,18 +75,20 @@ const Home = () => {
               </div>
             </div>
             <div className="form-body">
-              <form>
-                <div className="from-to">
-                  <div className="from mx-n5">
-                    <h6 style={{ color: "rgba(255, 255, 255, 0.767)" }}>
-                      From
-                    </h6>
+              <form onSubmit={handleSubmit} className="flight-form-home">
+                {/* From and To Cities Section */}
+                <div className="form-row">
+                  <div className="col">
+                    <h6 className="form-name text-black">From</h6>
                     <select
                       name="dep_city"
                       id="dep_city"
-                      className="frm-field required "
+                      className="frm-field required"
+                      value={formData.dep_city}
+                      onChange={handleChange}
+                      required
                     >
-                      <option value="0" selected disabled>
+                      <option value="" disabled>
                         Departure
                       </option>
                       {cities.map((city, index) => (
@@ -81,14 +98,17 @@ const Home = () => {
                       ))}
                     </select>
                   </div>
-                  <div className="to">
-                    <h6 style={{ color: "rgba(255, 255, 255, 0.767)" }}>To</h6>
+                  <div className="col">
+                    <h6 className="form-name text-black">To</h6>
                     <select
                       name="arr_city"
                       id="arr_city"
                       className="frm-field required"
+                      value={formData.arr_city}
+                      onChange={handleChange}
+                      required
                     >
-                      <option value="0" selected disabled>
+                      <option value="" disabled>
                         Arrival
                       </option>
                       {cities.map((city, index) => (
@@ -99,73 +119,71 @@ const Home = () => {
                     </select>
                   </div>
                 </div>
-                <div className="clear"></div>
 
-                <div className="date">
-                  <div className="depart">
-                    <h6 style={{ color: "rgba(255, 255, 255, 0.767)" }}>
-                      Depart
-                    </h6>
+                {/* Date and Class Section */}
+                <div className="form-row">
+                  <div className="col">
+                    <h6 className="form-name text-black">Depart</h6>
                     <input
                       className="form-control"
                       name="dep_date"
                       type="date"
+                      value={formData.dep_date}
+                      onChange={handleChange}
                       required
                     />
                   </div>
 
                   {roundTrip && (
-                    <div className="return">
-                      <h6 style={{ color: "rgba(255, 255, 255, 0.767)" }}>
-                        Return
-                      </h6>
+                    <div className="col">
+                      <h6 className="form-name text-black">Return</h6>
                       <input
                         className="form-control"
                         name="ret_date"
                         type="date"
+                        value={formData.ret_date}
+                        onChange={handleChange}
                         required
                       />
                     </div>
                   )}
-                  <div className="class">
-                    <h6 style={{ color: "rgba(255, 255, 255, 0.767)" }}>
-                      Class
-                    </h6>
-                    <select name="f_class" className="frm-field required">
+
+                  <div className="col">
+                    <h6 className="form-name text-black">Class</h6>
+                    <select
+                      name="f_class"
+                      className="frm-field required"
+                      value={formData.f_class}
+                      onChange={handleChange}
+                      required
+                    >
                       <option value="E">Economy</option>
                       <option value="B">Business</option>
                     </select>
                   </div>
                 </div>
 
-                <div className="clear"></div>
-                <div className="numofppl">
-                  <div className="adults">
+                {/* Number of Passengers */}
+                <div className="form-row">
+                  <div className="col passenger">
                     <h3>Passenger</h3>
                     <div className="quantity">
                       <div className="quantity-select">
-                        <div
-                          className="entry value-minus"
-                          onClick={handleMinus}
-                        >
-                          -
-                        </div>
+                        <div className="entry value-minus" onClick={handleMinus}>-</div>
                         <div className="entry value">
                           <span className="p-value">{value}</span>
                         </div>
-                        <div
-                          className="entry value-plus active"
-                          onClick={handlePlus}
-                        >
-                          +
-                        </div>
-                        <div className="search-button">
-                          <button type="button" className="button btn">
-                            Search Flights
-                          </button>
-                        </div>
+                        <div className="entry value-plus active" onClick={handlePlus}>+</div>
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="col">
+                    <button type="submit" className="btn-submit">
+                      <i className="fa fa-arrow-right"></i> Search Flights
+                    </button>
                   </div>
                 </div>
               </form>
@@ -173,10 +191,10 @@ const Home = () => {
           </div>
         </div>
       </div>
+
       <div className="intro-con">
         <div className="intro">
           <div className="des">
-            {" "}
             <div className="intro_icon">
               <img src={beach} alt="" />
             </div>
@@ -188,7 +206,6 @@ const Home = () => {
             </div>
           </div>
           <div className="des">
-            {" "}
             <div className="intro_icon">
               <img src={wallet} alt="" />
             </div>
@@ -215,7 +232,8 @@ const Home = () => {
           </div>
         </div>
       </div>
-   <Footer/>
+
+      
     </>
   );
 };

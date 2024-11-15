@@ -9,14 +9,18 @@ import Feedback from "./Components/Feedback/Feedback.jsx";
 import Navbar from "./Components/Navbar/Navbar";
 import Login from "./Components/Login/Login.jsx";
 import AdminLogin from "./Components/AdminLogin/AdminLogin";
-import AdminNavbar from "./Components/AdminNavbar/AdminNavbar.js";
+import AdminNavbar from "./Components/AdminNavbar/AdminNavbar.jsx";
 import Register from "./Components/Register/Register.jsx";
 import AdminDashboard from "./Components/AdminDashboard/AdminDashboard.jsx";
 import ManageAirlines from "./Components/ManageAirlines/ManageAirlines.jsx";
-import AdminHome from "./Components/AdminHome/AdminHome.jsx";
+
 import AddFlight from "./Components/AddFlight/AddFlight.jsx";
 import ListFlights from "./Components/ListFlights/ListFlights.jsx";
-
+import SearchResults from "./Components/SearchResults/SearchResults";
+import PassengerDetails from "./Components/PassengerDetails/PassengerDetails.jsx";
+import PaymentForm from "./Components/PaymentForm/PaymentForm.jsx";
+import PassengerList from "./Components/PassengerList/PassengerList.jsx";
+import Footer from "./Components/Footer/Footer.jsx";
 function App() {
   return (
     <Router>
@@ -39,12 +43,14 @@ function App() {
             <>
               <AdminNavbar />
               <Routes>
-                <Route path="home" element={<AdminHome />} />
+                {/* <Route path="home" element={<AdminHome />} /> */}
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="manage-airlines" element={<ManageAirlines />} />
                 <Route path="add-flight" element={<AddFlight />} />
                 <Route path="list-flights" element={<ListFlights />} />
+                <Route path="passenger-list" element={<PassengerList />} />
               </Routes>
+              <Footer/>
             </>
           }
         />
@@ -57,13 +63,17 @@ function App() {
               <Navbar />
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/searchResults" element={<SearchResults />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/my_flights" element={<MyFlight />} />
                 <Route path="/ticket" element={<Ticket />} />
                 <Route path="/feedback" element={<Feedback />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/passenger-details" element={<PassengerDetails />} />
+                <Route path="/payment-form" element={<PaymentForm />} />
               </Routes>
+              <Footer/>
             </>
           }
         />

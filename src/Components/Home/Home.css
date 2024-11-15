@@ -7,7 +7,7 @@
   height: 400px;
   width: 750px;
   border: none;
-  
+
   color: #3b3355;
 }
 .heading-container {
@@ -57,13 +57,13 @@
 
 .form-body {
   /* background: #5d5d81; */
-/* 
+  /* 
   background: #485563;  
 background: -webkit-linear-gradient(to bottom, #29323c, #485563);  
 background: linear-gradient(to bottom, #29323c, #485563);  */
-background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
-border: none; /* Light border for definition */
- /* White text color for contrast */
+  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+  border: none; /* Light border for definition */
+  /* White text color for contrast */
   height: 340px;
   width: 750px;
 }
@@ -75,16 +75,12 @@ border: none; /* Light border for definition */
   position: relative;
 }
 .from,
-.to
- {
+.to {
   margin-top: 8px;
   padding: 10px;
-  
 }
 .class {
-
   padding: 10px;
-  
 }
 .from {
   position: absolute;
@@ -152,11 +148,10 @@ border: none; /* Light border for definition */
 .value-minus,
 .value-plus {
   color: #333;
-
 }
 
 .button {
-  background-color: #2d3047;
+  background-color: #00796b;
   color: white;
   padding: 10px 20px;
   font-size: 16px;
@@ -166,12 +161,12 @@ border: none; /* Light border for definition */
   transition: all 0.3s ease;
 }
 
-.button.danger{
+.button.danger {
   background-color: red;
 }
 
 .button:hover {
-  background-color: #2d3047;
+  
   transform: scale(1.05);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   color: white;
@@ -208,8 +203,15 @@ border: none; /* Light border for definition */
   justify-content: space-between; /* Space out the date fields */
 }
 .intro {
-  background-color: rgba(255, 255, 255, 0.9); /* Light background with slight transparency */
-  backdrop-filter: blur(10px); /* Optional: gives a glassy, blurred effect behind the form */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.9
+  ); /* Light background with slight transparency */
+  backdrop-filter: blur(
+    10px
+  ); /* Optional: gives a glassy, blurred effect behind the form */
   border-radius: 10px; /* Smooth rounded corners */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Soft shadow for elevation */
   text-align: center;
@@ -257,4 +259,12 @@ img {
 }
 .intro_title {
   font-weight: bold;
+}
+.passenger {
+  justify-items: center;
+}
+.flight-form-home {
+  background-color: whitesmoke;
+  padding: 30px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 10px 15px rgba(0, 0, 0, 0.1);
 }

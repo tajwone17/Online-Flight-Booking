@@ -213,8 +213,8 @@ const AddFlight = () => {
                 Select Airline
               </option>
               {airlines.map((airline, index) => (
-                <option key={index} value={airline}>
-                  {airline}
+                <option key={index} value={airline.name}> {/* Airline name */}
+                  {airline.name}
                 </option>
               ))}
             </select>
