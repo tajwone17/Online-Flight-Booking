@@ -15,6 +15,7 @@ router.post("/api/add-flight", (req, res) => {
     arrCity,
     dura,
     price,
+    seats,
     airlineName,
     adminId,
   } = req.body;
@@ -27,13 +28,13 @@ router.post("/api/add-flight", (req, res) => {
   const arrivalDateTime = `${destDate} ${destTime}`;
 
   const sql = `
-    INSERT INTO flight (admin_id, departure, arrivale, source, destination, duration, price, airline)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO flight (admin_id, departure, arrivale, source, destination, duration, price,seats, airline)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)
   `;
 
   db.query(
     sql,
-    [adminId, departureDateTime, arrivalDateTime, depCity, arrCity, dura, price, airlineName],
+    [adminId, departureDateTime, arrivalDateTime, depCity, arrCity, dura, price,seats, airlineName],
     (err, result) => {
       if (err) {
         console.error("Error adding flight:", err);
@@ -75,7 +76,27 @@ router.get("/api/cities", (req, res) => {
     res.status(200).json({ cities });
   });
 });
+//Get passenger Route
+router.get("/api/dashboard-counts", (req, res) => {
+  const sql = `
+    SELECT 
+      (SELECT COUNT(passenger_id) FROM PASSENGER_PROFILE) AS totalPassengers,
+      (SELECT COUNT(flight_id) FROM FLIGHT) AS totalFlights,
+      (SELECT COUNT(airline_id) FROM airline) AS totalAirlines,
+      (SELECT SUM(amount) FROM payment) as totalAmount
+  `;
 
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err.message);
+      return res.status(500).send("Internal server error");
+    }
+    // Since the query returns a single object with the two counts, we extract them here.
+    const counts = result[0]; // result is an array with one object
+    console.log(counts);
+    res.status(200).json(counts);
+  });
+});
 
 // Get Airlines Route
 router.get("/api/airlines", (req, res) => {

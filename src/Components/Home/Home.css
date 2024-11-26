@@ -29,9 +29,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #95a3b3;
+  background: #00796b;
   font-weight: bold;
-  color: black;
+  color: white;
   cursor: pointer;
 }
 .left {
@@ -41,17 +41,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #95a3b3;
+  background: #00796b;
   font-weight: bold;
-  color: black;
+  color: white;
   cursor: pointer;
 }
 .left:hover {
-  color: white;
+  color:  black;
   transform: scale(1);
 }
 .right:hover {
-  color: white;
+  color: black;
   transform: scale(1);
 }
 

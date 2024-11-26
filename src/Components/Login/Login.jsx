@@ -46,7 +46,7 @@ const Login = () => {
         <>
             <div className="container d-flex justify-content-center align-items-center" style={{ height: '70vh' }}>
                 <div className="form-out col-md-4 p-4 shadow-sm rounded">
-                    <h1 className="text-secondary text-center mb-4">LOG IN PANEL</h1>
+                    <h1 className=" text-center mb-4" style={{color: '#00796b'}}>LOG IN PANEL</h1>
                     <form onSubmit={handleSubmit} className="text-center">
                         <div className="form-group mb-3">
                             <label htmlFor="user_id" className="form-label">Username/ Email</label>

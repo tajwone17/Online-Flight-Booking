@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import Axios
+import axios from 'axios'; 
 import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
 
 const ManageAirlines = () => {
   const [airlines, setAirlines] = useState([]); 
 
- 
   useEffect(() => {
     axios
       .get('http://localhost:3001/api/airlines') 
@@ -18,19 +17,39 @@ const ManageAirlines = () => {
       });
   }, []); 
 
-  
   const handleDelete = (id) => {
-    
+    const toastId = toast.warn(
+      <div>
+        <p>Are you sure you want to delete this airline?</p>
+        <button onClick={() => confirmDelete(id, toastId)} className="btn btn-danger me-2">
+          Yes
+        </button>
+        <button onClick={() => toast.dismiss(toastId)} className="btn btn-secondary">
+          No
+        </button>
+      </div>,
+      {
+        position: "top-center",
+        autoClose: false,
+        closeOnClick: false,
+        draggable: false,
+        hideProgressBar: true,
+        toastId: "delete-confirm", 
+      }
+    );
+  };
+
+  const confirmDelete = (id, toastId) => {
     axios
       .delete(`http://localhost:3001/api/airlines/${id}`)
       .then((response) => {
-        
         setAirlines(airlines.filter((airline) => airline.airline_id !== id));
-        toast.success('Airline deleted successfully!'); 
+        toast.success('Airline deleted successfully!');
+        toast.dismiss(toastId);  // Dismiss the confirmation toast after deletion
       })
       .catch((error) => {
-       
-        toast.error('Failed to delete airline!'); 
+        toast.error('Failed to delete airline!');
+        toast.dismiss(toastId);  // Dismiss the confirmation toast in case of failure
       });
   };
 
@@ -67,8 +86,6 @@ const ManageAirlines = () => {
           </tbody>
         </table>
       </div>
-      
-
       <ToastContainer />
     </main>
   );

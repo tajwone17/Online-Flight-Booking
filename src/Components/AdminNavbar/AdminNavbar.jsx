@@ -70,9 +70,9 @@ const AdminNavbar = () => {
       <nav className="admin-navbar">
         <div className="admin-navbar-left">
           <span className="admin-title fs-2">
-            <Link className="admin-nav-link" to="/admin/dashboard">
+            {/* <Link className="admin-nav-link" to="/admin/dashboard"> */}
               ADMIN PANEL
-            </Link>
+            {/* </Link> */}
           </span>
           {isLoggedIn && (
             <>
@@ -136,7 +136,7 @@ const AdminNavbar = () => {
 
               <div className="d-flex align-items-center me-5">
                 <span className="user-icon me-2 text-white fs-5">
-                  <i className="fas fa-user"></i>
+                  <i className="fa fa-user"></i>
                 </span>
                 <h6 className="username me-3 fw-bold text-white mb-0">
                   {username}
@@ -147,9 +147,10 @@ const AdminNavbar = () => {
               </button>
             </>
           ) : (
-            <button className="admin-go-back-button" onClick={handleGoBack}>
-              Go Back
-            </button>
+            // <button className="admin-go-back-button" onClick={handleGoBack}>
+            //   Go Back
+            // </button>
+            null
           )}
         </div>
       </nav>

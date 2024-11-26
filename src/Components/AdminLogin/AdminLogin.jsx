@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AdminLogin.css';
@@ -8,7 +8,12 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
- 
+  useEffect(() => {
+
+    localStorage.clear(); 
+   
+  }, []); 
+
 
   const handleLogout = () => {
     localStorage.clear();
@@ -40,7 +45,7 @@ const AdminLogin = () => {
           <div className="input-group">
             <label htmlFor="user_id">Username/Email</label>
             <div className="input-icon">
-              <i className="fas fa-user"></i>
+              <i className="fa fa-user"></i>
               <input 
               style={{padding:" 10px 10px 10px 100px"}}
                 type="text" 
@@ -54,7 +59,7 @@ const AdminLogin = () => {
           <div className="input-group">
             <label htmlFor="password">Password</label>
             <div className="input-icon">
-              <i className="fas fa-lock"></i>
+              <i className="fa fa-lock"></i>
               <input 
               style={{padding:" 10px 10px 10px 100px"}}
                 type="password" 
@@ -66,7 +71,7 @@ const AdminLogin = () => {
             </div>
           </div>
           {!isLoggedIn ?  <button type="submit" className="login-button">
-            <i className="fas fa-arrow-right"></i> Login
+            <i className="fa fa-arrow-right"></i> Login
           </button>:
            (
             <button 

@@ -18,21 +18,17 @@ const AddFlight = () => {
     dura: "",
     price: "",
     airlineName: "",
+    seats: "",  // New field for seats
   });
 
   // Fetch cities and airlines from the API on component mount
   useEffect(() => {
     const fetchCitiesAndAirlines = async () => {
       try {
-        const cityResponse = await axios.get(
-          "http://localhost:3001/api/cities"
-        );
-
+        const cityResponse = await axios.get("http://localhost:3001/api/cities");
         setCities(cityResponse.data.cities);
-        const airlineResponse = await axios.get(
-          "http://localhost:3001/api/airlines"
-        );
-
+        
+        const airlineResponse = await axios.get("http://localhost:3001/api/airlines");
         setAirlines(airlineResponse.data.airlines);
       } catch (error) {
         console.error("Error fetching cities and airlines:", error);
@@ -83,6 +79,7 @@ const AddFlight = () => {
           dura: "",
           price: "",
           airlineName: "",
+          seats: "",
         });
       }
     } catch (error) {
@@ -176,7 +173,7 @@ const AddFlight = () => {
           </div>
         </div>
 
-        {/* Duration and Price Section */}
+        {/* Duration, Price, and Seats Section */}
         <div className="form-row">
           <div className="col">
             <input
@@ -196,6 +193,17 @@ const AddFlight = () => {
               value={formData.price}
               onChange={handleChange}
               required
+            />
+          </div>
+          <div className="col">
+            <input
+              placeholder="Number of Seats"
+              type="number"
+              name="seats"
+              value={formData.seats}
+              onChange={handleChange}
+              required
+              min="1"  // Ensures at least one seat
             />
           </div>
         </div>

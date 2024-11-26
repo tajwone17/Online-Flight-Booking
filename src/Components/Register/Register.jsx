@@ -65,7 +65,7 @@ const Register = () => {
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <div className="input-icon">
-              <i className="fas fa-user"></i>
+              <i className="fa fa-user"></i>
               <input
                 type="text"
                 id="username"
@@ -79,7 +79,7 @@ const Register = () => {
           <div className="input-group">
             <label htmlFor="email">Email</label>
             <div className="input-icon">
-              <i className="fas fa-envelope"></i>
+              <i className="fa fa-envelope"></i>
               <input
                 type="email"
                 id="email"
@@ -93,7 +93,7 @@ const Register = () => {
           <div className="input-group">
             <label htmlFor="password">Password</label>
             <div className="input-icon">
-              <i className="fas fa-lock"></i>
+              <i className="fa fa-lock"></i>
               <input
                 type="password"
                 id="password"

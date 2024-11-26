@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import './Navbar.css';
+import "./Navbar.css";
 import { isLoggedIn } from "../../Constant/isLoggedIn";
+
 
 const Navbar = () => {
   const [username, setUsername] = useState("");
@@ -16,10 +17,15 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/');
+    navigate("/");
     window.location.reload();
   };
+ 
 
+  const goToAdminLogin = () => {
+  
+    navigate("/admin/login");
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
       <Link className="navbar-brand" to="/">
@@ -66,40 +72,35 @@ const Navbar = () => {
         </ul>
 
         {!isLoggedIn ? (
-          <div className="dropdown" style={{marginRight:'80px'}}>
-            <button
-              className="button btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Login
-            </button>
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <div className="" style={{ marginRight: "80px" }}>
+            
+              <Link to="/login" className="button btn-login ">Login</Link>
+           
+            {/* <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <li><Link className="dropdown-item" to="/login">Passenger</Link></li>
               <li><Link className="dropdown-item" to="/admin/login">Administrator</Link></li>
-            </ul>
+            </ul> */}
           </div>
         ) : (
           <div className="d-flex align-items-center me-5">
-          <span className="user-icon me-2 text-white fs-5"> {/* Larger size with fs-5 */}
-            <i className="fas fa-user"></i>
-          </span>
-          <h6 className="username me-5 fw-bold text-white mb-0"> {/* Use h6 and mb-0 to remove margin below */}
-            {username}
-          </h6>
-          <button
-            className="btn btn-danger"
-            type="button"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        </div>
-        
-        
+            <span className="user-icon me-2 text-white fs-5">
+              {" "}
+              {/* Larger size with fs-5 */}
+              <i className="fa fa-user"></i>
+            </span>
+            <h6 className="username me-5 fw-bold text-white mb-0">
+              {" "}
+              {/* Use h6 and mb-0 to remove margin below */}
+              {username}
+            </h6>
+            <button
+              className="btn btn-danger"
+              type="button"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         )}
       </div>
     </nav>
