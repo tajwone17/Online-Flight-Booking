@@ -34,13 +34,28 @@ router.post("/api/add-flight", (req, res) => {
 
   db.query(
     sql,
-    [adminId, departureDateTime, arrivalDateTime, depCity, arrCity, dura, price,seats, airlineName],
+    [
+      adminId,
+      departureDateTime,
+      arrivalDateTime,
+      depCity,
+      arrCity,
+      dura,
+      price,
+      seats,
+      airlineName,
+    ],
     (err, result) => {
       if (err) {
         console.error("Error adding flight:", err);
-        return res.status(500).json({ error: "Error adding flight to database" });
+        return res
+          .status(500)
+          .json({ error: "Error adding flight to database" });
       }
-      res.status(201).json({ message: "Flight added successfully", flightId: result.insertId });
+      res.status(201).json({
+        message: "Flight added successfully",
+        flightId: result.insertId,
+      });
     }
   );
 });
@@ -50,7 +65,9 @@ router.post("/api/add-airline", (req, res) => {
   const { name, seats } = req.body;
 
   if (!name || !seats) {
-    return res.status(400).json({ error: "Airline name and seats are required" });
+    return res
+      .status(400)
+      .json({ error: "Airline name and seats are required" });
   }
 
   // Insert into the airline table
@@ -58,9 +75,14 @@ router.post("/api/add-airline", (req, res) => {
   db.query(sql, [name, seats], (err, result) => {
     if (err) {
       console.error("Error adding airline:", err);
-      return res.status(500).json({ error: "Error adding airline to database" });
+      return res
+        .status(500)
+        .json({ error: "Error adding airline to database" });
     }
-    res.status(201).json({ message: "Airline added successfully", airlineId: result.insertId });
+    res.status(201).json({
+      message: "Airline added successfully",
+      airlineId: result.insertId,
+    });
   });
 });
 
@@ -138,35 +160,129 @@ router.get("/api/flights", (req, res) => {
     res.status(200).json({ flights: result }); // Send the airlines data as a response
   });
 });
-router.get("/api/todays-flights", (req, res) => {
-  // const date = new Date().toISOString();
-  // console.log(date)
-  const sql = `SELECT flight_id as id,arrivale,departure,Destination,source,airline FROM flight WHERE DATE(departure) = CURDATE();`; // Get all airlines from the airline table
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.error("Error fetching airlines:", err);
-      return res.status(500).json({ error: "Error fetching airlines" });
-    }
-    res.status(200).json({ flights: result }); // Send the airlines data as a response
-  });
-});
-router.delete('/api/flights/:id', (req, res) => {
+
+router.delete("/api/flights/:id", (req, res) => {
   const flightId = req.params.id;
-  
-  const deleteQuery = 'DELETE FROM flight WHERE flight_id = ?';
+
+  const deleteQuery = "DELETE FROM flight WHERE flight_id = ?";
 
   db.query(deleteQuery, [flightId], (err, result) => {
     if (err) {
-      console.error('Error deleting flight:', err);
-      return res.status(500).json({ error: 'Failed to delete the flight.' });
+      console.error("Error deleting flight:", err);
+      return res.status(500).json({ error: "Failed to delete the flight." });
     }
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Flight not found.' });
+      return res.status(404).json({ error: "Flight not found." });
     }
 
-    res.status(200).json({ message: 'Flight deleted successfully.' });
+    res.status(200).json({ message: "Flight deleted successfully." });
+  });
+});
+// Corrected PUT endpoint
+router.put("/api/manage-flight/:id", (req, res) => {
+  const { sourceDate, sourceTime, destDate, destTime } = req.body;
+
+  const flightId = req.params.id; // Extract the flight ID from the URL
+
+  // Combine date and time for departure and arrival
+  const departureDateTime = `${sourceDate} ${sourceTime}`;
+  const arrivalDateTime = `${destDate} ${destTime}`;
+
+  const sql =
+    "UPDATE flight SET departure = ?, arrivale = ? WHERE flight_id = ?"; // Use the correct table name and column name
+
+  db.query(
+    sql,
+    [departureDateTime, arrivalDateTime, flightId],
+    (err, result) => {
+      if (err) {
+        console.error("Error updating flight:", err);
+        return res
+          .status(500)
+          .json({ error: "Error updating flight details." });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: "Flight not found." });
+      }
+      console.log(result);
+
+      res.status(200).json({ message: "Flight updated successfully." });
+    }
+  );
+});
+
+router.get("/api/todays-flights", (req, res) => {
+  const now = new Date().toISOString(); // Capture the current timestamp for debugging
+  console.log("Current Time (now):", now); // Log current time
+
+  const sql = `
+    SELECT flight_id as id, arrivale, departure, destination, source, airline 
+    FROM flight 
+    WHERE 
+      DATE(departure) = CURDATE()  -- Ensure it's today's date
+      AND departure > NOW()        -- Departure time is before current time
+      AND arrivale > NOW();        -- Arrival time is before current time
+  `;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("Error fetching today's flights:", err);
+      return res.status(500).json({ error: "Error fetching today's flights" });
+    }
+
+    res.status(200).json({ flights: result });
   });
 });
 
+router.get("/api/departed-flights", (req, res) => {
+  const sql = `
+    SELECT 
+      flight_id as id, 
+      arrivale, 
+      departure, 
+      destination, 
+      source, 
+      airline 
+    FROM flight 
+    WHERE 
+      DATE(departure) = CURDATE()  -- Only consider flights on today's date
+      AND departure < NOW()        -- Departure time is before current time
+      AND arrivale > NOW();         -- Arrival time is after current time
+  `;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Error fetching departed flights" });
+    }
+    res.status(200).json({ flights: result });
+    console.log("Query Result:", result);
+  });
+});
+
+router.get("/api/arrived-flights", (req, res) => {
+  const sql = `
+    SELECT 
+      flight_id as id, 
+      arrivale, 
+      departure, 
+      destination, 
+      source, 
+      airline 
+    FROM flight 
+    WHERE 
+      DATE(departure) = CURDATE()  -- Only consider flights on today's date
+      AND departure < NOW()        -- Departure time is before current time
+      AND arrivale < NOW();         -- Arrival time is after current time
+  `;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Error fetching arrivedflights" });
+    }
+    res.status(200).json({ flights: result });
+    console.log("Query Result:", result);
+  });
+});
 module.exports = router;

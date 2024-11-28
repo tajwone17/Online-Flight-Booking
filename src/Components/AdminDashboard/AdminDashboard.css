@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .icon-section i{
 	font-size: 30px;
 	padding:10px;
@@ -66,4 +70,3 @@
     align-items: center;
     flex-direction: column;
   }
-  

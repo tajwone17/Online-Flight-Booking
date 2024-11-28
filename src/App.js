@@ -21,6 +21,7 @@ import PassengerDetails from "./Components/PassengerDetails/PassengerDetails.jsx
 import PaymentForm from "./Components/PaymentForm/PaymentForm.jsx";
 import PassengerList from "./Components/PassengerList/PassengerList.jsx";
 import Footer from "./Components/Footer/Footer.jsx";
+import ManageFlight from "./Components/ManageFlights/ManageFlight.jsx";
 function App() {
   return (
     <Router>
@@ -49,6 +50,8 @@ function App() {
                 <Route path="add-flight" element={<AddFlight />} />
                 <Route path="list-flights" element={<ListFlights />} />
                 <Route path="passenger-list" element={<PassengerList />} />
+                <Route path="dashboard/manageFlight/:id" element={<ManageFlight/>} />
+                
               </Routes>
               <Footer/>
             </>
@@ -72,6 +75,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/passenger-details" element={<PassengerDetails />} />
                 <Route path="/payment-form" element={<PaymentForm />} />
+              
               </Routes>
               <Footer/>
             </>

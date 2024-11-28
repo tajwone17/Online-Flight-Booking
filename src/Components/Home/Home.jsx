@@ -17,11 +17,12 @@ const Home = () => {
     dep_date: "",
     ret_date: "",
     f_class: "E",
-    passengers: 0, // Added passengers count
+    passengers: 0,
   });
 
   const [value, setValue] = useState(0); // Track the number of passengers
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({}); // Track errors
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -45,16 +46,55 @@ const Home = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateForm = () => {
+    let formErrors = {};
+    let isValid = true;
+
+    // Validate cities
+    if (!formData.dep_city || !formData.arr_city) {
+      formErrors.city = "Both departure and arrival cities must be selected.";
+      isValid = false;
+    } else if (formData.dep_city === formData.arr_city) {
+      formErrors.city = "Departure and arrival cities cannot be the same.";
+      isValid = false;
+    }
+
+    // Validate dates
+    const currentDate = new Date().toISOString().split('T')[0]; // Current date in 'YYYY-MM-DD' format
+
+    if (formData.dep_date < currentDate) {
+      formErrors.dep_date = "Departure date cannot be in the past.";
+      isValid = false;
+    }
+
+    if (roundTrip && formData.ret_date && formData.ret_date < formData.dep_date) {
+      formErrors.ret_date = "Return date must be later than the departure date.";
+      isValid = false;
+    }
+
+    if (value < 1) {
+      formErrors.passengers = "At least one passenger is required.";
+      isValid = false;
+    }
+
+    setErrors(formErrors);
+    return isValid;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return; // Don't submit if the form is not valid
+    }
+
     handleSearch();
   };
 
   const handleSearch = () => {
     const updatedFormData = { ...formData, passengers: value };
     navigate('/searchResults', { state: updatedFormData });
-};
-
+  };
 
   return (
     <>
@@ -63,7 +103,7 @@ const Home = () => {
           <img src={airtic} height="105px" width="105px" alt="" />
           Online Flight Booking
         </h1>
-        
+
         <div className="main">
           <div className="con">
             <div className="heading-container">
@@ -97,6 +137,7 @@ const Home = () => {
                         </option>
                       ))}
                     </select>
+                    {errors.city && <p className="error-text">{errors.city}</p>}
                   </div>
                   <div className="col">
                     <h6 className="form-name text-black">To</h6>
@@ -132,6 +173,7 @@ const Home = () => {
                       onChange={handleChange}
                       required
                     />
+                    {errors.dep_date && <p className="error-text">{errors.dep_date}</p>}
                   </div>
 
                   {roundTrip && (
@@ -145,6 +187,7 @@ const Home = () => {
                         onChange={handleChange}
                         required
                       />
+                      {errors.ret_date && <p className="error-text">{errors.ret_date}</p>}
                     </div>
                   )}
 
@@ -176,6 +219,7 @@ const Home = () => {
                         <div className="entry value-plus active" onClick={handlePlus}>+</div>
                       </div>
                     </div>
+                    {errors.passengers && <p className="error-text">{errors.passengers}</p>}
                   </div>
                 </div>
 
@@ -232,8 +276,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-
-      
     </>
   );
 };

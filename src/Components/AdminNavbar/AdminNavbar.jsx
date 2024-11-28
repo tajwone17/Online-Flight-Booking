@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./AdminNavbar.css";
 import { isLoggedIn } from "../../Constant/isLoggedIn";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css"; // Import Toastify styles
 import axios from "axios"; // Import Axios
 
 const AdminNavbar = () => {
+  const location = useLocation(); // Use the location hook to get the current path
   const [username, setUsername] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [airlineName, setAirlineName] = useState("");
@@ -24,10 +25,6 @@ const AdminNavbar = () => {
     localStorage.clear();
     navigate("/admin/login");
     window.location.reload();
-  };
-
-  const handleGoBack = () => {
-    navigate("/"); // Navigate back to the home page
   };
 
   const handleDropdownClick = (e) => {
@@ -85,9 +82,13 @@ const AdminNavbar = () => {
               <Link className="admin-nav-link" to="/admin/list-flights">
                 List Flights
               </Link>
-              <Link className="admin-nav-link" to="/admin/manage-airlines">
-                Manage Airlines
-              </Link>
+
+              {/* Conditionally render 'Manage Airlines' link */}
+             
+                <Link className="admin-nav-link" to="/admin/manage-airlines">
+                  Manage Airlines
+                </Link>
+              
             </>
           )}
         </div>
@@ -95,7 +96,8 @@ const AdminNavbar = () => {
         <div className="admin-navbar-right">
           {isLoggedIn ? (
             <>
-              <div className="admin-dropdown">
+             {location.pathname === "/admin/manage-airlines" && ( 
+               <div className="admin-dropdown">
                 <button
                   className="admin-dropdown-button"
                   onClick={() => setShowForm(!showForm)}
@@ -133,7 +135,7 @@ const AdminNavbar = () => {
                   </div>
                 )}
               </div>
-
+            )}
               <div className="d-flex align-items-center me-5">
                 <span className="user-icon me-2 text-white fs-5">
                   <i className="fa fa-user"></i>

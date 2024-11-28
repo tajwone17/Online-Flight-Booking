@@ -21,6 +21,8 @@ const AddFlight = () => {
     seats: "",  // New field for seats
   });
 
+  const [errors, setErrors] = useState({});  // State to manage error messages
+
   // Fetch cities and airlines from the API on component mount
   useEffect(() => {
     const fetchCitiesAndAirlines = async () => {
@@ -42,8 +44,57 @@ const AddFlight = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateForm = () => {
+    let formErrors = {};
+    let isValid = true;
+
+    // Validate dates and times
+    const departureDateTime = new Date(`${formData.sourceDate}T${formData.sourceTime}`);
+    const arrivalDateTime = new Date(`${formData.destDate}T${formData.destTime}`);
+
+    if (departureDateTime >= arrivalDateTime) {
+      formErrors.dateTime = "Departure time must be earlier than the arrival time.";
+      isValid = false;
+    }
+
+    // Validate cities
+    if (formData.depCity === formData.arrCity) {
+      formErrors.city = "Departure and Arrival cities cannot be the same.";
+      isValid = false;
+    }
+
+    // Validate price
+    const price = parseFloat(formData.price);
+    if (isNaN(price) || price <= 0 || price > 10000) {
+      formErrors.price = "Price must be a positive number between $1 and $10,000.";
+      isValid = false;
+    }
+
+    // Validate number of seats
+    const seats = parseInt(formData.seats);
+    if (isNaN(seats) || seats < 1 || seats > 500) {
+      formErrors.seats = "Seats must be a positive number between 1 and 500.";
+      isValid = false;
+    }
+
+    // Validate flight duration
+    const duration = parseInt(formData.dura);
+    if (isNaN(duration) || duration < 30 || duration > 1440) { // Duration must be between 30 mins and 24 hours (1440 minutes)
+      formErrors.dura = "Duration must be between 30 minutes and 24 hours.";
+      isValid = false;
+    }
+
+    setErrors(formErrors);
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fix the errors before submitting!");  // Error toast
+      return;  // Don't submit the form if validation fails
+    }
 
     // Add adminId here, could come from authentication context, session, etc.
     const adminId = 1;  // Example: Replace with the actual admin ID dynamically
@@ -153,6 +204,7 @@ const AddFlight = () => {
                 </option>
               ))}
             </select>
+            {errors.city && <p className="error-text">{errors.city}</p>}
           </div>
           <div className="col">
             <select
@@ -177,23 +229,25 @@ const AddFlight = () => {
         <div className="form-row">
           <div className="col">
             <input
-              placeholder="Duration"
-              type="text"
+              placeholder="Duration (minutes)"
+              type="number"
               name="dura"
               value={formData.dura}
               onChange={handleChange}
               required
             />
+            {errors.dura && <p className="error-text">{errors.dura}</p>}
           </div>
           <div className="col">
             <input
-              placeholder="Price"
+              placeholder="Price ($)"
               type="number"
               name="price"
               value={formData.price}
               onChange={handleChange}
               required
             />
+            {errors.price && <p className="error-text">{errors.price}</p>}
           </div>
           <div className="col">
             <input
@@ -203,8 +257,9 @@ const AddFlight = () => {
               value={formData.seats}
               onChange={handleChange}
               required
-              min="1"  // Ensures at least one seat
+              min="1"
             />
+            {errors.seats && <p className="error-text">{errors.seats}</p>}
           </div>
         </div>
 
@@ -221,7 +276,7 @@ const AddFlight = () => {
                 Select Airline
               </option>
               {airlines.map((airline, index) => (
-                <option key={index} value={airline.name}> {/* Airline name */}
+                <option key={index} value={airline.name}>
                   {airline.name}
                 </option>
               ))}
