@@ -9,6 +9,7 @@ const AdminDashboard = () => {
   const [totalFlights, setTotalFlights] = useState(0);
   const [totalAirlines, setTotalAirlines] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [todaysFlight, setTodaysFlight] = useState([])
 
   useEffect(() => {
     // Fetch total passengers and total amount from the backend
@@ -26,7 +27,22 @@ const AdminDashboard = () => {
       }
     };
 
+
+    // Fetch total passengers and total amount from the backend
+    const fetchTodaysFlight = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:3001/api/todays-flights"
+        );
+        setTodaysFlight(res.data.flights)
+        console.log(res.data.flights)
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
     fetchDashboardData();
+    fetchTodaysFlight();
   }, []);
 
   const [flights] = useState([
@@ -56,6 +72,7 @@ const AdminDashboard = () => {
     },
   ]);
 
+  
   return (
     <main
       className="m-5"
@@ -121,50 +138,18 @@ const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {flights.map((flight) => (
+                {todaysFlight.map((flight, index) => (
                   <tr key={flight.id}>
-                    <td>{flight.id}</td>
-                    <td>{flight.arrival}</td>
-                    <td>{flight.departure}</td>
-                    <td>{flight.destination}</td>
+                    <td>{index+1}</td>
+                    <td>{new Date(flight.arrivale).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' })}</td>
+                    <td>{new Date(flight.departure).toLocaleTimeString()}</td>
+                    <td>{flight.Destination}</td>
                     <td>{flight.source}</td>
                     <td>{flight.airline}</td>
                     <td>
-                      <div className="dropdown mt-0">
-                        <button
-                          className="btn btn-dark dropdown-toggle"
-                          type="button"
-                          id={`dropdownMenuButton-${flight.id}`}
-                          data-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                        >
-                          <i className="fa fa-ellipsis-v"></i>
-                        </button>
-                        <div
-                          className="dropdown-menu"
-                          aria-labelledby={`dropdownMenuButton-${flight.id}`}
-                        >
-                          <div className="dropdown-item">
-                            <label htmlFor="timeInput">Enter time in min. (Eg. 120)</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              id="timeInput"
-                              placeholder="Enter time"
-                            />
-                          </div>
-                          <div className="dropdown-item">
-                            <button className="btn btn-danger btn-sm">
-                              Submit issue
-                            </button>
-                          </div>
-                          <div className="dropdown-item">
-                            <button className="btn btn-primary btn-sm">
-                              Departed
-                            </button>
-                          </div>
-                        </div>
+                      <div className="">
+                  <Link to={`./manageFlight/${flight.id}`} className="btn btn-primary">Manage Flight</Link>
+                     
                       </div>
                     </td>
                   </tr>

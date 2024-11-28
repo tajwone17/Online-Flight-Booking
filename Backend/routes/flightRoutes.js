@@ -93,7 +93,7 @@ router.get("/api/dashboard-counts", (req, res) => {
     }
     // Since the query returns a single object with the two counts, we extract them here.
     const counts = result[0]; // result is an array with one object
-    console.log(counts);
+    // console.log(counts);
     res.status(200).json(counts);
   });
 });
@@ -138,9 +138,21 @@ router.get("/api/flights", (req, res) => {
     res.status(200).json({ flights: result }); // Send the airlines data as a response
   });
 });
+router.get("/api/todays-flights", (req, res) => {
+  // const date = new Date().toISOString();
+  // console.log(date)
+  const sql = `SELECT flight_id as id,arrivale,departure,Destination,source,airline FROM flight WHERE DATE(departure) = CURDATE();`; // Get all airlines from the airline table
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("Error fetching airlines:", err);
+      return res.status(500).json({ error: "Error fetching airlines" });
+    }
+    res.status(200).json({ flights: result }); // Send the airlines data as a response
+  });
+});
 router.delete('/api/flights/:id', (req, res) => {
   const flightId = req.params.id;
-
+  
   const deleteQuery = 'DELETE FROM flight WHERE flight_id = ?';
 
   db.query(deleteQuery, [flightId], (err, result) => {
