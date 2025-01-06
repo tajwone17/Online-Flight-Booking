@@ -26,10 +26,10 @@ const Login = () => {
     
         try {
             const response = await axios.post("http://localhost:3001/auth/login", formData);
-            const { token, username } = response.data; 
+            const { token, username,userId } = response.data; 
             localStorage.setItem("token", token);
             localStorage.setItem("username", username);
-    
+            localStorage.setItem("userId", userId);
             navigate("/"); 
             window.location.reload();
         } catch (error) {

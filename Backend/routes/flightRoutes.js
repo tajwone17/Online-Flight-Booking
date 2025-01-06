@@ -371,4 +371,37 @@ router.get("/api/arrived-flights", (req, res) => {
   });
 });
 
+router.get('/api/user-flights', async (req, res) => {
+  try {
+      const { userId } = req.query; // Check if userId is received in the query
+      console.log("Received userId:", userId);
+
+      if (!userId) {
+          return res.status(400).json({ error: "User ID is required" });
+      }
+
+      const query = `
+          SELECT f.flight_id, f.arrivale, f.departure, f.Destination, f.source, f.airline
+          FROM flight f
+          JOIN passenger_profile p ON f.flight_id = p.flight_id
+          WHERE p.user_id = ?;
+      `;
+      console.log("Executing query:", query, "with params:", [userId]);
+
+      db.query(query, [userId], (err, results) => {
+          if (err) {
+              console.error("Error executing query:", err);
+              return res.status(500).json({ error: 'Failed to fetch flight details' });
+          }
+
+          console.log("Query results:", results);
+          res.json(results);
+      });
+  } catch (error) {
+      console.error("Error fetching flight details:", error);
+      res.status(500).json({ error: 'Failed to fetch flight details' });
+  }
+});
+
+
 module.exports = router;

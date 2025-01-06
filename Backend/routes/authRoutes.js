@@ -39,13 +39,11 @@ router.post("/signup", async (req, res) => {
     res.status(500).json({ error: "Error hashing password" });
   }
 });
-
-// Login Route (User)
 router.post("/login", (req, res) => {
   const { user_id, user_pass } = req.body;
 
   const sql = "SELECT * FROM users WHERE email = ? OR username = ?";
-  db.query(sql, [user_id, user_id], async (err, results) => {
+  db.query(sql, [user_id,user_id], async (err, results) => {
     if (err) return res.status(500).json({ error: "Database error" });
     if (results.length === 0) {
       return res.status(401).json({ error: "Invalid username/email or password" });
@@ -63,9 +61,12 @@ router.post("/login", (req, res) => {
       message: "Login successful",
       token,
       username: user.username,
+      userId: user.user_id,
     });
   });
 });
+// Login Route (User)
+
 
 // Admin Login Route
 router.post("/admin/login", (req, res) => {
