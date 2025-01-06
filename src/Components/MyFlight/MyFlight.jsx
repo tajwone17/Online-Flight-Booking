@@ -54,7 +54,7 @@ const MyFlight = () => {
         <div>
             <h2 className="flight-title">FLIGHT STATUS</h2>
             {flights.length === 0 ? (
-                <div>No flights found.</div>
+                <div className="flight-status-card "><strong>No flights found.</strong></div>
             ) : (
                 flights.map((flight) => (
                     <div key={flight.flight_id} className="flight-status-card">
