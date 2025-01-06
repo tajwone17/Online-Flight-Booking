@@ -249,17 +249,18 @@ const AdminDashboard = () => {
                   <tr key={flight.id}>
                     <td>{index + 1}</td>
                     <td>
-                      {new Date(flight.departure).toLocaleString("en-US", {
-                        dateStyle: "short",
-                        timeStyle: "short",
-                      })}
-                    </td>
-                    <td>
                       {new Date(flight.arrivale).toLocaleString("en-US", {
                         dateStyle: "short",
                         timeStyle: "short",
                       })}
                     </td>
+                    <td>
+                      {new Date(flight.departure).toLocaleString("en-US", {
+                        dateStyle: "short",
+                        timeStyle: "short",
+                      })}
+                    </td>
+                   
 
                     <td>{flight.destination}</td>
                     <td>{flight.source}</td>

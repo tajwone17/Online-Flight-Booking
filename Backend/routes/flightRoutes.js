@@ -3,8 +3,6 @@ const db = require("../db");
 const app = express();
 const router = express.Router();
 app.use(express.json());
-
-// Add Flight Route (Already implemented)
 router.post("/api/add-flight", (req, res) => {
   const {
     sourceDate,
@@ -14,8 +12,8 @@ router.post("/api/add-flight", (req, res) => {
     depCity,
     arrCity,
     dura,
-    price,
-    seats,
+    Bprice,
+    Eprice,
     airlineName,
     adminId,
   } = req.body;
@@ -27,37 +25,55 @@ router.post("/api/add-flight", (req, res) => {
   const departureDateTime = `${sourceDate} ${sourceTime}`;
   const arrivalDateTime = `${destDate} ${destTime}`;
 
-  const sql = `
-    INSERT INTO flight (admin_id, departure, arrivale, source, destination, duration, price,seats, airline)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)
-  `;
+  // Step 1: Query to get seats for the given airline
+  const seatQuery = `SELECT seats FROM airline WHERE name = ?`;
 
-  db.query(
-    sql,
-    [
-      adminId,
-      departureDateTime,
-      arrivalDateTime,
-      depCity,
-      arrCity,
-      dura,
-      price,
-      seats,
-      airlineName,
-    ],
-    (err, result) => {
-      if (err) {
-        console.error("Error adding flight:", err);
-        return res
-          .status(500)
-          .json({ error: "Error adding flight to database" });
-      }
-      res.status(201).json({
-        message: "Flight added successfully",
-        flightId: result.insertId,
-      });
+  db.query(seatQuery, [airlineName], (seatErr, seatResult) => {
+    if (seatErr) {
+      console.error("Error fetching seats:", seatErr);
+      return res.status(500).json({ error: "Error fetching airline data" });
     }
-  );
+
+    if (seatResult.length === 0) {
+      return res.status(404).json({ error: "Airline not found" });
+    }
+
+    const seats = seatResult[0].seats;
+
+    const insertFlightQuery = `
+      INSERT INTO flight (admin_id, departure, arrivale, source, destination, duration, BusPrice,
+    EcoPrice, seats, airline)
+      VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?)
+    `;
+
+    db.query(
+      insertFlightQuery,
+      [
+        adminId,
+        departureDateTime,
+        arrivalDateTime,
+        depCity,
+        arrCity,
+        dura,
+        Bprice,
+        Eprice,
+        seats,
+        airlineName,
+      ],
+      (err, result) => {
+        if (err) {
+          console.error("Error adding flight:", err);
+          return res
+            .status(500)
+            .json({ error: "Error adding flight to database" });
+        }
+        res.status(201).json({
+          message: "Flight added successfully",
+          flightId: result.insertId,
+        });
+      }
+    );
+  });
 });
 
 // Add Airline Route (New)
@@ -206,7 +222,6 @@ router.put("/api/manage-flight/:id", (req, res) => {
       if (result.affectedRows === 0) {
         return res.status(404).json({ error: "Flight not found." });
       }
-      console.log(result);
 
       res.status(200).json({ message: "Flight updated successfully." });
     }
@@ -215,7 +230,6 @@ router.put("/api/manage-flight/:id", (req, res) => {
 
 router.get("/api/todays-flights", (req, res) => {
   const now = new Date().toISOString(); // Capture the current timestamp for debugging
-  console.log("Current Time (now):", now); // Log current time
 
   const sql = `
     SELECT flight_id as id, arrivale, departure, destination, source, airline 
@@ -257,7 +271,79 @@ router.get("/api/departed-flights", (req, res) => {
       return res.status(500).json({ error: "Error fetching departed flights" });
     }
     res.status(200).json({ flights: result });
-    console.log("Query Result:", result);
+  });
+});
+
+// Route to get passenger details by flight ID
+router.get("/api/passengers/:id", (req, res) => {
+  const { id } = req.params; // Get flight_id from query parameters
+
+  // Validate flight_id
+  if (!id) {
+    return res.status(400).json({ error: "flight_id parameter is required" });
+  }
+
+  const query = `
+    SELECT 
+      p.passenger_id,
+      p.user_id,
+      p.mobile,
+      p.dob,
+      p.f_name,
+      p.m_name,
+      p.l_name,
+      f.flight_id
+    FROM 
+      passenger_profile p
+    JOIN 
+      flight f
+    ON 
+      p.flight_id = f.flight_id
+    WHERE 
+      f.flight_id = ?; 
+  `;
+
+  // Execute the query
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    res.json(results); // Return the fetched data as JSON
+  });
+});
+
+router.get("/api/passengers-user/:id", (req, res) => {
+  const { id } = req.params; // Get flight_id from query parameters
+
+  // Validate flight_id
+  if (!id) {
+    return res.status(400).json({ error: "flight_id parameter is required" });
+  }
+
+  const query = `
+ SELECT 
+    p.amount,
+    u.username,
+    p.user_id 
+FROM 
+    payment p
+JOIN 
+    users u
+ON 
+    p.user_id = u.user_id
+WHERE 
+    p.flight_id = ?;
+
+  `;
+
+  // Execute the query
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    res.json(results); // Return the fetched data as JSON
   });
 });
 
@@ -282,7 +368,7 @@ router.get("/api/arrived-flights", (req, res) => {
       return res.status(500).json({ error: "Error fetching arrivedflights" });
     }
     res.status(200).json({ flights: result });
-    console.log("Query Result:", result);
   });
 });
+
 module.exports = router;

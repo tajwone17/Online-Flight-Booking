@@ -56,7 +56,7 @@ const ManageAirlines = () => {
   return (
     <main>
       <div className="container-md mt-2">
-        <h1 className="display-4 text-center text-white">AIRLINES LIST</h1>
+        <h1 className="display-4 text-center " style={{color:"#16A085"}}>AIRLINES LIST</h1>
         <table className="table table-bordered">
           <thead className="table-dark">
             <tr>

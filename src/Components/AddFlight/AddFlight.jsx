@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./AddFlight.css";
 import axios from "axios";
-import { toast, ToastContainer } from 'react-toastify';  // Import react-toastify functions
-import 'react-toastify/dist/ReactToastify.css';  // Import styles for toast notifications
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  
 const AddFlight = () => {
   const [cities, setCities] = useState([]);
   const [airlines, setAirlines] = useState([]);
@@ -16,14 +15,14 @@ const AddFlight = () => {
     depCity: "",
     arrCity: "",
     dura: "",
-    price: "",
+    Bprice: "",
+    Eprice:"",
     airlineName: "",
-    seats: "",  // New field for seats
+    // seats: "",  // New field for seats
   });
 
-  const [errors, setErrors] = useState({});  // State to manage error messages
+  const [errors, setErrors] = useState({});  
 
-  // Fetch cities and airlines from the API on component mount
   useEffect(() => {
     const fetchCitiesAndAirlines = async () => {
       try {
@@ -47,47 +46,47 @@ const AddFlight = () => {
   const validateForm = () => {
     let formErrors = {};
     let isValid = true;
-
-    // Validate dates and times
+  
+  
     const departureDateTime = new Date(`${formData.sourceDate}T${formData.sourceTime}`);
     const arrivalDateTime = new Date(`${formData.destDate}T${formData.destTime}`);
-
+  
     if (departureDateTime >= arrivalDateTime) {
       formErrors.dateTime = "Departure time must be earlier than the arrival time.";
       isValid = false;
     }
-
+  
     // Validate cities
     if (formData.depCity === formData.arrCity) {
       formErrors.city = "Departure and Arrival cities cannot be the same.";
       isValid = false;
     }
-
-    // Validate price
-    const price = parseFloat(formData.price);
-    if (isNaN(price) || price <= 0 || price > 10000) {
-      formErrors.price = "Price must be a positive number between $1 and $10,000.";
+  
+    // Validate Business Class price
+    const bPrice = parseFloat(formData.Bprice);
+    if (isNaN(bPrice) || bPrice <= 0 || bPrice > 10000 && ePrice>bPrice) {
+      formErrors.Bprice = "Business Class Price must be a positive number between $1 and $10,000.";
       isValid = false;
     }
-
-    // Validate number of seats
-    const seats = parseInt(formData.seats);
-    if (isNaN(seats) || seats < 1 || seats > 500) {
-      formErrors.seats = "Seats must be a positive number between 1 and 500.";
+  
+    // Validate Economy Class price
+    const ePrice = parseFloat(formData.Eprice);
+    if (isNaN(ePrice) || ePrice <= 0 || ePrice > 10000 && ePrice<bPrice) {
+      formErrors.Eprice = "Economy Class Price must be a positive number between $1 and $10,000.";
       isValid = false;
     }
-
+  
     // Validate flight duration
     const duration = parseInt(formData.dura);
-    if (isNaN(duration) || duration < 30 || duration > 1440) { // Duration must be between 30 mins and 24 hours (1440 minutes)
+    if (isNaN(duration) || duration < 30 || duration > 1440) {
       formErrors.dura = "Duration must be between 30 minutes and 24 hours.";
       isValid = false;
     }
-
+  
     setErrors(formErrors);
     return isValid;
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -128,9 +127,10 @@ const AddFlight = () => {
           depCity: "",
           arrCity: "",
           dura: "",
-          price: "",
+          Bprice: "",
+          Eprice: "",
           airlineName: "",
-          seats: "",
+          // seats: "",
         });
       }
     } catch (error) {
@@ -240,10 +240,10 @@ const AddFlight = () => {
           </div>
           <div className="col">
             <input
-              placeholder="Price ($)"
+              placeholder=" Business Class Price ($)"
               type="number"
-              name="price"
-              value={formData.price}
+              name="Bprice"
+              value={formData.Bprice}
               onChange={handleChange}
               required
             />
@@ -251,15 +251,15 @@ const AddFlight = () => {
           </div>
           <div className="col">
             <input
-              placeholder="Number of Seats"
+              placeholder="Economy Class Price ($)"
               type="number"
-              name="seats"
-              value={formData.seats}
+              name="Eprice"
+              value={formData.Eprice}
               onChange={handleChange}
               required
               min="1"
             />
-            {errors.seats && <p className="error-text">{errors.seats}</p>}
+            {errors.E && <p className="error-text">{errors.seats}</p>}
           </div>
         </div>
 

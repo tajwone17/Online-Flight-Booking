@@ -1,5 +1,5 @@
 // Validation.js
-import React from 'react';
+
 
 const Validations = ({ user_id, user_pass }) => {
     const errors = {};

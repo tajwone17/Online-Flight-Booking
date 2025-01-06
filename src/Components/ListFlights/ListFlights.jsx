@@ -58,8 +58,8 @@ const FlightList = () => {
     }
   };
 
-  const handleNavigate = () => {
-    navigate('/admin/passenger-list');
+  const handleNavigate = (flightId) => {
+    navigate(`/admin/passenger-list/${flightId}`);
   };
 
   if (loading) {
@@ -69,7 +69,7 @@ const FlightList = () => {
   return (
     <main>
       <div className="container-md mt-2">
-        <h1 className="display-4 text-center text-white">FLIGHT LIST</h1>
+        <h1 className="display-4 text-center " style={{color:"#16A085"}}>FLIGHT LIST</h1>
         <table className="table table-bordered">
           <thead className="table-dark">
             <tr>
@@ -80,7 +80,8 @@ const FlightList = () => {
               <th scope="col">Destination</th>
               <th scope="col">Airline</th>
               <th scope="col">Seats</th>
-              <th scope="col">Price</th>
+              <th scope="col">Business Class Price</th>
+              <th scope="col">Economy Class Price</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -88,17 +89,24 @@ const FlightList = () => {
             {flights.map((flight) => (
               <tr key={flight.flight_id} className="text-center">
                 <td scope="row">
-                  <button onClick={handleNavigate}>
+                  <button onClick={()=>handleNavigate(flight.flight_id)}>
                     {flight.flight_id}
                   </button>
                 </td>
-                <td>{flight.arrivale}</td>
-                <td>{flight.departure}</td>
+                <td> {new Date(flight.arrivale).toLocaleString("en-US", {
+                          dateStyle: "short",
+                          timeStyle: "short",
+                        })}</td>
+                <td>  {new Date(flight.departure).toLocaleString("en-US", {
+                          dateStyle: "short",
+                          timeStyle: "short",
+                        })}</td>
                 <td>{flight.source}</td>
                 <td>{flight.Destination}</td>
                 <td>{flight.airline}</td>
                 <td>{flight.Seats}</td>
-                <td>${flight.Price}</td>
+                <td>${flight.BusPrice}</td>
+                <td>${flight.EcoPrice}</td>
                 <td>
                   <button
                     className="btn"

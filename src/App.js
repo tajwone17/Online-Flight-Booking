@@ -49,7 +49,7 @@ function App() {
                 <Route path="manage-airlines" element={<ManageAirlines />} />
                 <Route path="add-flight" element={<AddFlight />} />
                 <Route path="list-flights" element={<ListFlights />} />
-                <Route path="passenger-list" element={<PassengerList />} />
+                <Route path="passenger-list/:id" element={<PassengerList />} />
                 <Route path="dashboard/manageFlight/:id" element={<ManageFlight/>} />
                 
               </Routes>

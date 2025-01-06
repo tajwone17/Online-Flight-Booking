@@ -1,49 +1,41 @@
-import React from 'react';
-
-// Static data for passengers
-const passengers = [
-  {
-    id: 1,
-    firstName: 'John',
-    middleName: 'Doe',
-    lastName: 'Smith',
-    contact: '123-456-7890',
-    dob: '1990-01-01',
-    paidBy: 'user',
-    amount: 100,
-  },
-  {
-    id: 2,
-    firstName: 'Jane',
-    middleName: 'Alice',
-    lastName: 'Johnson',
-    contact: '987-654-3210',
-    dob: '1992-02-02',
-    paidBy: 'user',
-    amount: 150,
-  },
-  {
-    id: 3,
-    firstName: 'Michael',
-    middleName: 'George',
-    lastName: 'Williams',
-    contact: '555-555-5555',
-    dob: '1985-03-03',
-    paidBy: 'User',
-    amount: 200,
-  },
-  // Add more passenger data as needed
-];
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const PassengerList = () => {
+  const { id } = useParams();
+  const [passengers, setPassengers] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchPassengerData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/api/passengers/${id}`);
+        setPassengers(response.data);
+      } catch (error) {
+        console.error('Error fetching passenger data:', error);
+      }
+    };
+
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/api/passengers-user/${id}`);
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchPassengerData();
+    fetchUserData();
+  }, [id]);
+
   return (
     <main>
-      {/* Conditionally render if admin is logged in */}
-      {/* For simplicity, we'll assume the admin is logged in */}
       <div className="container-md mt-2">
-        <h1 className="display-4 text-center text-white">Passenger List</h1>
+        <h1 className="display-4 text-center text-white">Passenger List for Flight {id}</h1>
         <table className="table table-bordered">
-          <thead className="thead-dark">
+          <thead className="thead-dark text-center">
             <tr>
               <th>#</th>
               <th scope="col">First Name</th>
@@ -56,18 +48,23 @@ const PassengerList = () => {
             </tr>
           </thead>
           <tbody>
-            {passengers.map((passenger, index) => (
-              <tr key={passenger.id} className="text-center">
-                <td>{index + 1}</td>
-                <td>{passenger.firstName}</td>
-                <td>{passenger.middleName}</td>
-                <td>{passenger.lastName}</td>
-                <td>{passenger.contact}</td>
-                <td>{passenger.dob}</td>
-                <td>{passenger.paidBy}</td>
-                <td>${passenger.amount}</td>
-              </tr>
-            ))}
+            {passengers.map((passenger, index) => {
+              // Find the user for the passenger
+              const user = users.find(user => user.user_id === passenger.user_id);
+
+              return (
+                <tr key={passenger.passenger_id} className="text-center">
+                  <td>{index + 1}</td>
+                  <td>{passenger.f_name}</td>
+                  <td>{passenger.m_name}</td>
+                  <td>{passenger.l_name}</td>
+                  <td>{passenger.mobile}</td>
+                  <td>{new Date(passenger.dob).toLocaleDateString()}</td>
+                  <td>{user ? user.username : 'Loading...'}</td>
+                  <td>${user ? user.amount : 'Loading...'}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
