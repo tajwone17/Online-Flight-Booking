@@ -371,37 +371,74 @@ router.get("/api/arrived-flights", (req, res) => {
   });
 });
 
-router.get('/api/user-flights', async (req, res) => {
+router.get("/api/user-flights", async (req, res) => {
   try {
-      const { userId } = req.query; // Check if userId is received in the query
-      console.log("Received userId:", userId);
+    const { userId } = req.query; 
+    console.log("Received userId:", userId);
 
-      if (!userId) {
-          return res.status(400).json({ error: "User ID is required" });
-      }
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
 
-      const query = `
+    const query = `
           SELECT f.flight_id, f.arrivale, f.departure, f.Destination, f.source, f.airline
           FROM flight f
           JOIN passenger_profile p ON f.flight_id = p.flight_id
           WHERE p.user_id = ?;
       `;
-      console.log("Executing query:", query, "with params:", [userId]);
+    console.log("Executing query:", query, "with params:", [userId]);
 
-      db.query(query, [userId], (err, results) => {
-          if (err) {
-              console.error("Error executing query:", err);
-              return res.status(500).json({ error: 'Failed to fetch flight details' });
-          }
+    db.query(query, [userId], (err, results) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        return res
+          .status(500)
+          .json({ error: "Failed to fetch flight details" });
+      }
 
-          console.log("Query results:", results);
-          res.json(results);
-      });
+      console.log("Query results:", results);
+      res.json(results);
+    });
   } catch (error) {
-      console.error("Error fetching flight details:", error);
-      res.status(500).json({ error: 'Failed to fetch flight details' });
+    console.error("Error fetching flight details:", error);
+    res.status(500).json({ error: "Failed to fetch flight details" });
   }
 });
 
+// Get Tickets Route
+router.get("/api/tickets", (req, res) => {
+  const { userId } = req.query;
+  const query = `
+    SELECT 
+      t.ticket_id,
+      f.flight_id,
+      f.departure,
+      f.arrivale,
+      f.source,
+      f.destination,
+      f.airline,
+      t.seat_no,
+      t.class,
+      p.f_name,
+      p.m_name,
+      p.l_name
+    FROM 
+      ticket t
+    JOIN 
+      flight f ON t.flight_id = f.flight_id
+    JOIN 
+      passenger_profile p ON t.passenger_id = p.passenger_id
+    WHERE 
+      t.user_id = ?;
+  `;
 
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error("Error fetching tickets:", err);
+      return res.status(500).json({ error: "Error fetching tickets" });
+    }
+    console.log("Tickets fetched successfully:", results);
+    res.status(200).json({ tickets: results });
+  });
+});
 module.exports = router;

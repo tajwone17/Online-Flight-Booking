@@ -100,7 +100,7 @@ const Home = () => {
     <>
       <div className="main-agileinfo">
         <h1 className="text-light brand mt-2">
-          <img src={airtic} height="105px" width="105px" alt="" />
+          <img className="immg" src={airtic} height="105px" width="105px" alt="" />
           Online Flight Booking
         </h1>
 
@@ -240,7 +240,7 @@ const Home = () => {
         <div className="intro">
           <div className="des">
             <div className="intro_icon">
-              <img src={beach} alt="" />
+              <img className="immg" src={beach} alt="" />
             </div>
             <div className="intro_content">
               <div className="intro_title">Top Destinations</div>
@@ -251,7 +251,7 @@ const Home = () => {
           </div>
           <div className="des">
             <div className="intro_icon">
-              <img src={wallet} alt="" />
+              <img className="immg" src={wallet} alt="" />
             </div>
             <div className="intro_content">
               <div className="intro_title">The Best Prices</div>
@@ -262,7 +262,7 @@ const Home = () => {
           </div>
           <div className="des">
             <div className="intro_icon">
-              <img src={suitcase} alt="" />
+              <img className="immg" src={suitcase} alt="" />
             </div>
             <div className="intro_content">
               <div className="intro_title">Amazing Services</div>

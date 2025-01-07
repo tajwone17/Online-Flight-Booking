@@ -233,7 +233,7 @@ background: linear-gradient(to bottom, #29323c, #485563);  */
   border-radius: 40px;
   flex-direction: row;
 }
-img {
+.immg {
   width: 50px;
   height: auto;
 }
