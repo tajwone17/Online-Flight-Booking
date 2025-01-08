@@ -483,7 +483,7 @@ router.delete("/api/cancel-ticket/:id", (req, res) => {
         }
 
         // Step 3: Update the seat count in the flight table
-        const seatClassColumn = seatClass === "Business" ? "Bus_seats" : "Eco_Seats";
+        const seatClassColumn = seatClass === "B" ? "bus_seats" : "eco_seats";
         const seatUpdateQuery = `
           UPDATE flight 
           SET ${seatClassColumn} = ${seatClassColumn} + 1, seats = seats + 1
