@@ -21,14 +21,14 @@ const TicketComponent = () => {
 
     fetchTickets();
   }, []);
+
   const handlePrint = (ticketId) => {
     const ticketElement = document.getElementById(`ticket-${ticketId}`);
     if (ticketElement) {
-        const printCSS = `
+      const printCSS = `
             @media print {
                 body * { 
                     visibility: hidden; 
-                   
                 }
                 #ticket-${ticketId}, #ticket-${ticketId} * { 
                     visibility: visible; 
@@ -37,8 +37,7 @@ const TicketComponent = () => {
                     position: absolute; 
                     left: 50px; 
                     top: 80px; 
-                    width: 100%; /* Ensure full width of the ticket */
-                  
+                    width: 100%; 
                 }
                 .dropdown, .dropdown-toggle, .dropdown-menu { 
                     display: none !important; 
@@ -46,22 +45,44 @@ const TicketComponent = () => {
                 html, body {
                     margin: 0;
                     padding: 0;
-                    overflow: hidden; /* Prevent overflow issues */
-                    height: auto; /* Ensure proper scaling */
+                    overflow: hidden; 
+                    height: auto; 
                 }
             }
         `;
-        const styleSheet = document.createElement("style");
-        styleSheet.type = "text/css";
-        styleSheet.innerHTML = printCSS;
-        document.head.appendChild(styleSheet);
+      const styleSheet = document.createElement("style");
+      styleSheet.type = "text/css";
+      styleSheet.innerHTML = printCSS;
+      document.head.appendChild(styleSheet);
 
-        window.print(); // Trigger the print dialog
+      window.print(); // Trigger the print dialog
 
-        document.head.removeChild(styleSheet); // Remove the temporary print styles
+      document.head.removeChild(styleSheet); // Remove the temporary print styles
     }
-};
+  };
 
+  const handleDelete = async (ticketId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to cancel this ticket? This action cannot be undone."
+    );
+
+    if (confirmDelete) {
+      try {
+        // Make DELETE request to backend
+        await axios.delete(`http://localhost:3001/api/cancel-ticket/${ticketId}`);
+        
+        // Update local state to remove the deleted ticket
+        setTickets((prevTickets) =>
+          prevTickets.filter((ticket) => ticket.ticket_id !== ticketId)
+        );
+
+        alert("Ticket successfully canceled.");
+      } catch (error) {
+        console.error("Error canceling ticket:", error);
+        alert("An error occurred while canceling the ticket. Please try again.");
+      }
+    }
+  };
 
   if (tickets.length === 0) {
     return <h2 className="text-center text-light mt-4">No tickets found.</h2>;
@@ -213,8 +234,11 @@ const TicketComponent = () => {
                   >
                     <i className="fa fa-print"></i> Print Ticket
                   </button>
-                  <button className="dropdown-item btn btn-danger btn-sm">
-                    <i className="fa fa-trash "></i> Cancel Ticket
+                  <button
+                    className="dropdown-item btn btn-danger btn-sm"
+                    onClick={() => handleDelete(ticket_id)}
+                  >
+                    <i className="fa fa-trash"></i> Cancel Ticket
                   </button>
                 </div>
               </div>

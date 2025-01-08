@@ -442,4 +442,66 @@ router.get("/api/tickets", (req, res) => {
     res.status(200).json({ tickets: results });
   });
 });
+
+router.delete("/api/cancel-ticket/:id", (req, res) => {
+  const ticketId = req.params.id;
+
+  // Step 1: Fetch ticket details to determine the seat class and flight ID
+  const ticketQuery = `
+    SELECT t.flight_id, t.class, p.passenger_id 
+    FROM ticket t 
+    JOIN passenger_profile p ON t.passenger_id = p.passenger_id 
+    WHERE t.ticket_id = ?
+  `;
+
+  db.query(ticketQuery, [ticketId], (ticketErr, ticketResult) => {
+    if (ticketErr) {
+      console.error("Error fetching ticket details:", ticketErr);
+      return res.status(500).json({ error: "Failed to fetch ticket details." });
+    }
+
+    if (ticketResult.length === 0) {
+      return res.status(404).json({ error: "Ticket not found." });
+    }
+
+    const { flight_id, class: seatClass, passenger_id } = ticketResult[0];
+
+    // Step 2: Delete the ticket and passenger record
+    const deleteTicketQuery = "DELETE FROM ticket WHERE ticket_id = ?";
+    const deletePassengerQuery = "DELETE FROM passenger_profile WHERE passenger_id = ?";
+
+    db.query(deleteTicketQuery, [ticketId], (delTicketErr) => {
+      if (delTicketErr) {
+        console.error("Error deleting ticket:", delTicketErr);
+        return res.status(500).json({ error: "Failed to delete the ticket." });
+      }
+
+      db.query(deletePassengerQuery, [passenger_id], (delPassengerErr) => {
+        if (delPassengerErr) {
+          console.error("Error deleting passenger profile:", delPassengerErr);
+          return res.status(500).json({ error: "Failed to delete passenger profile." });
+        }
+
+        // Step 3: Update the seat count in the flight table
+        const seatClassColumn = seatClass === "Business" ? "Bus_seats" : "Eco_Seats";
+        const seatUpdateQuery = `
+          UPDATE flight 
+          SET ${seatClassColumn} = ${seatClassColumn} + 1, seats = seats + 1
+          WHERE flight_id = ?
+        `;
+
+        db.query(seatUpdateQuery, [flight_id], (updateSeatErr) => {
+          if (updateSeatErr) {
+            console.error("Error updating seat count:", updateSeatErr);
+            return res.status(500).json({ error: "Failed to update seat count." });
+          }
+
+          res.status(200).json({ message: "Ticket canceled successfully." });
+        });
+      });
+    });
+  });
+});
+
+
 module.exports = router;
