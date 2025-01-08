@@ -419,6 +419,7 @@ router.get("/api/tickets", (req, res) => {
       f.airline,
       t.seat_no,
       t.class,
+      f.GATE,
       p.f_name,
       p.m_name,
       p.l_name
