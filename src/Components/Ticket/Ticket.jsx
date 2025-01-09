@@ -85,7 +85,7 @@ const TicketComponent = () => {
   };
 
   if (tickets.length === 0) {
-    return <h2 className="text-center text-light mt-4">No tickets found.</h2>;
+    return <h2 className="text-center text-light mt-4 h2">No tickets found.</h2>;
   }
 
   return (
@@ -126,12 +126,12 @@ const TicketComponent = () => {
             <div className="col-8 out">
               <div className="row">
                 <div className="col">
-                  <h2 className="text-secondary mb-0 brand">
+                  <h2 className="text-secondary mb-0 brand h2">
                     Online Flight Booking
                   </h2>
                 </div>
                 <div className="col">
-                  <h2 className="mb-0">{classType} CLASS</h2>
+                  <h2 className="mb-0 h2">{classType} CLASS</h2>
                 </div>
               </div>
               <hr />
@@ -193,7 +193,7 @@ const TicketComponent = () => {
             >
               <div className="row">
                 <div className="col">
-                  <h2 className="text-light text-center brand">
+                  <h2 className="text-light text-center brand h2">
                     Online Flight Booking
                   </h2>
                 </div>
