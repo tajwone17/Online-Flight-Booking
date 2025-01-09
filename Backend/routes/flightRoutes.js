@@ -521,6 +521,27 @@ router.delete("/api/cancel-ticket/:id", (req, res) => {
     });
   });
 });
+router.post("/api/feedback", async (req, res) => {
+  const { email, q1, q2, q3, rate } = req.body;
+
+  // Validate request body
+  if (!email || !q1 || !q2 || !q3 || !rate) {
+    return res.status(400).json({ error: "All fields are required." });
+  }
+
+  try {
+    const query = `
+      INSERT INTO feedback (email, q1, q2, q3, rate)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    await db.execute(query, [email, q1, q2, q3, rate]);
+
+    res.status(201).json({ message: "Feedback submitted successfully!" });
+  } catch (error) {
+    console.error("Error inserting feedback:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
 
 
 module.exports = router;
