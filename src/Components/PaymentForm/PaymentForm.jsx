@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-
+import { useLocation } from "react-router-dom";
 const PaymentForm = () => {
   const [ccNumber, setCcNumber] = useState('');
   const [ccExp, setCcExp] = useState('');
   const [cvv, setCvv] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const location = useLocation();
+  const passengerData = location.state || {};
   // Validate the form fields
   const validateForm = () => {
     const regCardNo = /^[0-9]{12,16}$/;

@@ -2,28 +2,39 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const PassengerDetails = () => {
-    const [firstName, setFirstName] = useState('');
-    const [middleName, setMiddleName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [contactNo, setContactNo] = useState('');
-    const [dob, setDob] = useState('');
+ 
     const navigate = useNavigate();
+const [formData, setFormData] = useState({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    contactNo: '',
+    dob: ''
+});
 
+const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
     // Check if all fields are filled
+    const { firstName, middleName, lastName, contactNo, dob } = formData;
     const isFormValid = firstName && middleName && lastName && contactNo && dob;
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         // Perform validation or save passenger data if needed
+        console.log("Form data submitted:", formData);
         // After successful form submission, navigate to the payment form
         if (isFormValid) {
-            navigate('/payment-form');
+            handleProceed();
         } else {
             alert("Please fill all fields");
         }
     };
-
+    const handleProceed = () => {
+        const updatedFormData = { ...formData};
+        navigate('/payment-form', { state: updatedFormData });
+      };
     return (
         <div className="container my-5 d-flex justify-content-center">
             <div 
@@ -43,11 +54,12 @@ const PassengerDetails = () => {
                             <label htmlFor="firstName" className="form-label">Firstname</label>
                             <input 
                                 type="text" 
+                                name="firstName"
                                 className="form-control" 
                                 id="firstName" 
                                 placeholder="Firstname" 
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
+                                value={formData.firstName}
+                                onChange={handleChange}
                                 style={{ height: '45px' }} 
                             />
                         </div>
@@ -57,9 +69,10 @@ const PassengerDetails = () => {
                                 type="text" 
                                 className="form-control" 
                                 id="middleName" 
+                                name="middleName"
                                 placeholder="Middlename" 
-                                value={middleName}
-                                onChange={(e) => setMiddleName(e.target.value)}
+                                value={formData.middleName}
+                                onChange={handleChange}
                                 style={{ height: '45px' }}
                             />
                         </div>
@@ -68,10 +81,11 @@ const PassengerDetails = () => {
                             <input 
                                 type="text" 
                                 className="form-control" 
+                                name="lastName"
                                 id="lastName" 
                                 placeholder="Lastname" 
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
+                                value={formData.lastName}
+                                onChange={handleChange}
                                 style={{ height: '45px' }}
                             />
                         </div>
@@ -84,9 +98,10 @@ const PassengerDetails = () => {
                                 type="tel" 
                                 className="form-control" 
                                 id="contactNo" 
+                                name="contactNo"
                                 placeholder="Contact No" 
-                                value={contactNo}
-                                onChange={(e) => setContactNo(e.target.value)}
+                                value={formData.contactNo}
+                                onChange={handleChange}
                                 style={{ height: '45px' }}
                             />
                         </div>
@@ -96,8 +111,9 @@ const PassengerDetails = () => {
                                 type="date" 
                                 className="form-control" 
                                 id="dob" 
-                                value={dob}
-                                onChange={(e) => setDob(e.target.value)}
+                                name="dob" 
+                                value={formData.dob}
+                                onChange={handleChange}
                                 style={{ height: '45px' }}
                             />
                         </div>

@@ -11,7 +11,7 @@ const SearchResults = () => {
   const searchData = location.state || {};
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(true);
-console.log(searchData)
+
   useEffect(() => {
     const fetchFlights = async () => {
       try {

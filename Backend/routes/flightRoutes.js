@@ -50,7 +50,8 @@ router.post("/api/add-flight", (req, res) => {
       }
 
       // If there are no flights found for this airline
-      const bus_seats = busSeatsResult.length > 0 ? busSeatsResult[0].bus_seats : 0;
+      const bus_seats =
+        busSeatsResult.length > 0 ? busSeatsResult[0].bus_seats : 0;
 
       // Step 3: Calculate eco_seats
       const eco_seats = seats - bus_seats;
@@ -93,7 +94,6 @@ router.post("/api/add-flight", (req, res) => {
     });
   });
 });
-
 
 // Add Airline Route (New)
 router.post("/api/add-airline", (req, res) => {
@@ -392,7 +392,7 @@ router.get("/api/arrived-flights", (req, res) => {
 
 router.get("/api/user-flights", async (req, res) => {
   try {
-    const { userId } = req.query; 
+    const { userId } = req.query;
     console.log("Received userId:", userId);
 
     if (!userId) {
@@ -405,7 +405,6 @@ router.get("/api/user-flights", async (req, res) => {
           JOIN passenger_profile p ON f.flight_id = p.flight_id
           WHERE p.user_id = ?;
       `;
-   
 
     db.query(query, [userId], (err, results) => {
       if (err) {
@@ -415,7 +414,6 @@ router.get("/api/user-flights", async (req, res) => {
           .json({ error: "Failed to fetch flight details" });
       }
 
-   
       res.json(results);
     });
   } catch (error) {
@@ -457,7 +455,7 @@ router.get("/api/tickets", (req, res) => {
       console.error("Error fetching tickets:", err);
       return res.status(500).json({ error: "Error fetching tickets" });
     }
-    
+
     res.status(200).json({ tickets: results });
   });
 });
@@ -487,7 +485,8 @@ router.delete("/api/cancel-ticket/:id", (req, res) => {
 
     // Step 2: Delete the ticket and passenger record
     const deleteTicketQuery = "DELETE FROM ticket WHERE ticket_id = ?";
-    const deletePassengerQuery = "DELETE FROM passenger_profile WHERE passenger_id = ?";
+    const deletePassengerQuery =
+      "DELETE FROM passenger_profile WHERE passenger_id = ?";
 
     db.query(deleteTicketQuery, [ticketId], (delTicketErr) => {
       if (delTicketErr) {
@@ -498,7 +497,9 @@ router.delete("/api/cancel-ticket/:id", (req, res) => {
       db.query(deletePassengerQuery, [passenger_id], (delPassengerErr) => {
         if (delPassengerErr) {
           console.error("Error deleting passenger profile:", delPassengerErr);
-          return res.status(500).json({ error: "Failed to delete passenger profile." });
+          return res
+            .status(500)
+            .json({ error: "Failed to delete passenger profile." });
         }
 
         // Step 3: Update the seat count in the flight table
@@ -512,7 +513,9 @@ router.delete("/api/cancel-ticket/:id", (req, res) => {
         db.query(seatUpdateQuery, [flight_id], (updateSeatErr) => {
           if (updateSeatErr) {
             console.error("Error updating seat count:", updateSeatErr);
-            return res.status(500).json({ error: "Failed to update seat count." });
+            return res
+              .status(500)
+              .json({ error: "Failed to update seat count." });
           }
 
           res.status(200).json({ message: "Ticket canceled successfully." });
@@ -543,9 +546,9 @@ router.post("/api/feedback", async (req, res) => {
   }
 });
 router.get("/api/search-flights", (req, res) => {
-  const { dep_city, arr_city, dep_date,  f_class , passengers  } = req.query;
+  const { dep_city, arr_city, dep_date, f_class, passengers } = req.query;
 
-  try{
+  try {
     if (!dep_city || !arr_city || !dep_date || !f_class || !passengers) {
       return res.status(400).json({ error: "All fields are required." });
     }
@@ -571,18 +574,25 @@ router.get("/api/search-flights", (req, res) => {
     ORDER BY 
       f.departure ASC;
     `;
-    db.query(query, [f_class,f_class,dep_city, arr_city, dep_date, passengers], (err, results) => {
-      if (err) {
-        console.error("Error fetching flights:", err);
-        return res.status(500).json({ error: "Failed to fetch flights." });
+    db.query(
+      query,
+      [f_class, f_class, dep_city, arr_city, dep_date, passengers],
+      (err, results) => {
+        if (err) {
+          console.error("Error fetching flights:", err);
+          return res.status(500).json({ error: "Failed to fetch flights." });
+        }
+        res.status(200).json({ flights: results });
+        console.log(results);
       }
-      res.status(200).json({ flights: results });
-      console.log(results)
-    });
+    );
   } catch (error) {
     console.error("Error fetching flights:", error);
     res.status(500).json({ error: "Failed to fetch flights." });
   }
+});
+router.post("/api/passenger-details", (req, res) => {
+  
 });
 
 module.exports = router;
