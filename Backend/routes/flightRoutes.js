@@ -25,7 +25,7 @@ router.post("/api/add-flight", (req, res) => {
   const departureDateTime = `${sourceDate} ${sourceTime}`;
   const arrivalDateTime = `${destDate} ${destTime}`;
 
-  // Step 1: Query to get seats for the given airline
+  // Step 1: Query to get seats from the airline table
   const seatQuery = `SELECT seats FROM airline WHERE name = ?`;
 
   db.query(seatQuery, [airlineName], (seatErr, seatResult) => {
@@ -38,43 +38,62 @@ router.post("/api/add-flight", (req, res) => {
       return res.status(404).json({ error: "Airline not found" });
     }
 
-    const seats = seatResult[0].seats;
+    const seats = seatResult[0].seats; // Get the total seats from the airline
 
-    const insertFlightQuery = `
-      INSERT INTO flight (admin_id, departure, arrivale, source, destination, duration, BusPrice,
-    EcoPrice, seats, airline)
-      VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?)
-    `;
+    // Step 2: Query to get bus_seats from the flight table
+    const busSeatsQuery = `SELECT bus_seats FROM flight WHERE airline = ? ORDER BY flight_id DESC LIMIT 1`;
 
-    db.query(
-      insertFlightQuery,
-      [
-        adminId,
-        departureDateTime,
-        arrivalDateTime,
-        depCity,
-        arrCity,
-        dura,
-        Bprice,
-        Eprice,
-        seats,
-        airlineName,
-      ],
-      (err, result) => {
-        if (err) {
-          console.error("Error adding flight:", err);
-          return res
-            .status(500)
-            .json({ error: "Error adding flight to database" });
-        }
-        res.status(201).json({
-          message: "Flight added successfully",
-          flightId: result.insertId,
-        });
+    db.query(busSeatsQuery, [airlineName], (busSeatsErr, busSeatsResult) => {
+      if (busSeatsErr) {
+        console.error("Error fetching bus_seats:", busSeatsErr);
+        return res.status(500).json({ error: "Error fetching flight data" });
       }
-    );
+
+      // If there are no flights found for this airline
+      const bus_seats = busSeatsResult.length > 0 ? busSeatsResult[0].bus_seats : 0;
+
+      // Step 3: Calculate eco_seats
+      const eco_seats = seats - bus_seats;
+
+      // Step 4: Insert the new flight data
+      const insertFlightQuery = `
+        INSERT INTO flight (admin_id, departure, arrivale, source, destination, duration, BusPrice,
+      EcoPrice, seats, airline, eco_seats)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      db.query(
+        insertFlightQuery,
+        [
+          adminId,
+          departureDateTime,
+          arrivalDateTime,
+          depCity,
+          arrCity,
+          dura,
+          Bprice,
+          Eprice,
+          seats,
+          airlineName,
+          eco_seats, // Insert calculated eco_seats
+        ],
+        (err, result) => {
+          if (err) {
+            console.error("Error adding flight:", err);
+            return res
+              .status(500)
+              .json({ error: "Error adding flight to database" });
+          }
+          res.status(201).json({
+            message: "Flight added successfully",
+            flightId: result.insertId,
+          });
+        }
+      );
+    });
   });
 });
+
 
 // Add Airline Route (New)
 router.post("/api/add-airline", (req, res) => {
