@@ -542,6 +542,43 @@ router.post("/api/feedback", async (req, res) => {
     res.status(500).json({ error: "Internal server error." });
   }
 });
+router.get("/api/search-flights", (req, res) => {
+  const { dep_city, arr_city, dep_date, ret_date, f_class , passengers  } = req.body;
 
+  try{
+    if (!dep_city || !arr_city || !dep_date || !f_class || !passengers) {
+      return res.status(400).json({ error: "All fields are required." });
+    }
+    const query = `
+    SELECT 
+      f.airline,
+      f.departure,
+      f.arrivale,
+      f.status,
+      f.EcoPrice,
+      f.BusPrice
+    FROM 
+      flight f
+    WHERE 
+      f.source = ? 
+      AND f.destination = ? 
+      AND DATE(f.departure) = ? 
+      
+      AND f.seats >= ? 
+    ORDER BY 
+      f.departure ASC;
+    `;
+    db.query(query, [dep_city, arr_city, dep_date, passengers], (err, results) => {
+      if (err) {
+        console.error("Error fetching flights:", err);
+        return res.status(500).json({ error: "Failed to fetch flights." });
+      }
+      res.status(200).json({ flights: results });
+    });
+  } catch (error) {
+    console.error("Error fetching flights:", error);
+    res.status(500).json({ error: "Failed to fetch flights." });
+  }
+});
 
 module.exports = router;
