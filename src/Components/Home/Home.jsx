@@ -5,17 +5,17 @@ import airtic from "../../Assets/Images/airtic.png";
 import beach from "../../Assets/Images/beach.svg";
 import suitcase from "../../Assets/Images/suitcase.svg";
 import wallet from "../../Assets/Images/wallet.svg";
-import Footer from '../../Components/Footer/Footer';
+
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [roundTrip, setRoundTrip] = useState(true);
+  
   const [cities, setCities] = useState([]);
   const [formData, setFormData] = useState({
     dep_city: "",
     arr_city: "",
     dep_date: "",
-    ret_date: "",
+   
     f_class: "E",
     passengers: 0,
   });
@@ -39,8 +39,7 @@ const Home = () => {
   const handlePlus = () => setValue(value + 1);
   const handleMinus = () => value > 0 && setValue(value - 1);
 
-  const handleTripChange = () => setRoundTrip(false);
-  const handleTripChangeRT = () => setRoundTrip(true);
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -64,11 +63,6 @@ const Home = () => {
 
     if (formData.dep_date < currentDate) {
       formErrors.dep_date = "Departure date cannot be in the past.";
-      isValid = false;
-    }
-
-    if (roundTrip && formData.ret_date && formData.ret_date < formData.dep_date) {
-      formErrors.ret_date = "Return date must be later than the departure date.";
       isValid = false;
     }
 
@@ -110,7 +104,7 @@ const Home = () => {
             <div className="form-body">
             <div className="heading-container">
            
-           <h2 className="heading">Book Your Flight</h2>
+           <h2 className="heading"><strong>Book Your Flight</strong></h2>
            </div>
               <form onSubmit={handleSubmit} className="flight-form-home">
                 {/* From and To Cities Section */}
