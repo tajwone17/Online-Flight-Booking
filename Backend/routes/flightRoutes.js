@@ -543,7 +543,7 @@ router.post("/api/feedback", async (req, res) => {
   }
 });
 router.get("/api/search-flights", (req, res) => {
-  const { dep_city, arr_city, dep_date, ret_date, f_class , passengers  } = req.body;
+  const { dep_city, arr_city, dep_date,  f_class , passengers  } = req.query;
 
   try{
     if (!dep_city || !arr_city || !dep_date || !f_class || !passengers) {
@@ -554,9 +554,12 @@ router.get("/api/search-flights", (req, res) => {
       f.airline,
       f.departure,
       f.arrivale,
-      f.status,
-      f.EcoPrice,
-      f.BusPrice
+     
+    
+        CASE 
+        WHEN ? = 'E' THEN f.EcoPrice 
+        WHEN ? = 'B' THEN f.BusPrice 
+      END AS fare
     FROM 
       flight f
     WHERE 
@@ -568,12 +571,13 @@ router.get("/api/search-flights", (req, res) => {
     ORDER BY 
       f.departure ASC;
     `;
-    db.query(query, [dep_city, arr_city, dep_date, passengers], (err, results) => {
+    db.query(query, [f_class,f_class,dep_city, arr_city, dep_date, passengers], (err, results) => {
       if (err) {
         console.error("Error fetching flights:", err);
         return res.status(500).json({ error: "Failed to fetch flights." });
       }
       res.status(200).json({ flights: results });
+      console.log(results)
     });
   } catch (error) {
     console.error("Error fetching flights:", error);

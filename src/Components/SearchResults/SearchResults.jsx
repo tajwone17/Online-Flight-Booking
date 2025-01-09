@@ -1,19 +1,37 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../../Constant/isLoggedIn";
-import './SearchResults.css';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./SearchResults.css";
 import Footer from "../Footer/Footer";
 
 const SearchResults = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchData = location.state || {};
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState(true);
+console.log(searchData)
+  useEffect(() => {
+    const fetchFlights = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3001/api/search-flights",
+          {
+            params: searchData,
+          }
+        );
+        console.log(response.data)
+        setFlights(response.data.flights);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching flight data:", error);
+        setLoading(false);
+      }
+    };
 
-  const flightData = {
-    airline: "Aero Airways",
-    departure: "2022-07-05 22:14:00",
-    arrival: "2022-07-05 23:58:00",
-    status: "Not yet Departed",
-    fare: "$370",
-  };
+    fetchFlights();
+  }, [searchData]);
 
   const handleBuyClick = () => {
     if (!isLoggedIn) {
@@ -24,10 +42,13 @@ const SearchResults = () => {
   };
 
   return (
-    <>
-      <div className="text-center p-4 bg-light sr-container">
-        <h2>FLIGHTS FROM:</h2>
-        <h3>Tredence to Zhotrora</h3>
+    <div className="text-center p-4 bg-light sr-container">
+      <h2>
+        Flights from: {searchData.dep_city} to {searchData.arr_city}
+      </h2>
+      {loading ? (
+        <p>Loading flights...</p>
+      ) : flights.length > 0 ? (
         <div className="table-responsive">
           <table className="table table-bordered table-striped mt-3">
             <thead className="table-secondary">
@@ -35,42 +56,34 @@ const SearchResults = () => {
                 <th>Airline</th>
                 <th>Departure</th>
                 <th>Arrival</th>
-                <th>Status</th>
                 <th>Fare</th>
                 <th>Buy</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>{flightData.airline}</td>
-                <td>{flightData.departure}</td>
-                <td>{flightData.arrival}</td>
-                <td>{flightData.status}</td>
-                <td>{flightData.fare}</td>
-                <td>
-                  {isLoggedIn ? (
-                    <button 
-                      className="btn btn-success" 
+              {flights.map((flight, index) => (
+                <tr key={index}>
+                  <td>{flight.airline}</td>
+                  <td>{new Date(flight.departure).toLocaleString()}</td>
+                  <td>{new Date(flight.arrivale).toLocaleString()}</td>
+                  <td>${flight.fare * searchData.passengers}</td>
+                  <td>
+                    <button
+                      className="btn btn-success"
                       onClick={handleBuyClick}
                     >
                       Buy
                     </button>
-                  ) : (
-                    <span 
-                      style={{ cursor: "pointer", color: "#00796b" }} 
-                      onClick={handleBuyClick}
-                    >
-                      Login to continue
-                    </span>
-                  )}
-                </td>
-              </tr>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-      </div>
-      
-    </>
+      ) : (
+        <p>No flights found for the selected criteria.</p>
+      )}
+    </div>
   );
 };
 

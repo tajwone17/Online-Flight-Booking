@@ -22,10 +22,10 @@
 
   font-size: 20px;
 }
-.right {
+.heading-container{
   border: none;
   height: 60px;
-  width: 375px;
+  width: 750px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,26 +34,8 @@
   color: white;
   cursor: pointer;
 }
-.left {
-  height: 60px;
-  width: 375px;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #00796b;
-  font-weight: bold;
-  color: white;
-  cursor: pointer;
-}
-.left:hover {
-  color:  black;
-  transform: scale(1);
-}
-.right:hover {
-  color: black;
-  transform: scale(1);
-}
+
+
 
 .form-body {
   /* background: #5d5d81; */

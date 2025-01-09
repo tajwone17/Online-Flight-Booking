@@ -106,15 +106,12 @@ const Home = () => {
 
         <div className="main">
           <div className="con">
-            <div className="heading-container">
-              <div className="left" onClick={handleTripChangeRT}>
-                Round Trip
-              </div>
-              <div className="right" onClick={handleTripChange}>
-                One Way
-              </div>
-            </div>
+          
             <div className="form-body">
+            <div className="heading-container">
+           
+           <h2 className="heading">Book Your Flight</h2>
+           </div>
               <form onSubmit={handleSubmit} className="flight-form-home">
                 {/* From and To Cities Section */}
                 <div className="form-row">
@@ -176,21 +173,7 @@ const Home = () => {
                     {errors.dep_date && <p className="error-text">{errors.dep_date}</p>}
                   </div>
 
-                  {roundTrip && (
-                    <div className="col">
-                      <h6 className="form-name text-black">Return</h6>
-                      <input
-                        className="form-control"
-                        name="ret_date"
-                        type="date"
-                        value={formData.ret_date}
-                        onChange={handleChange}
-                        required
-                      />
-                      {errors.ret_date && <p className="error-text">{errors.ret_date}</p>}
-                    </div>
-                  )}
-
+                  
                   <div className="col">
                     <h6 className="form-name text-black">Class</h6>
                     <select
