@@ -554,6 +554,7 @@ router.get("/api/search-flights", (req, res) => {
     }
     const query = `
     SELECT 
+    f.flight_id,
       f.airline,
       f.departure,
       f.arrivale,
@@ -591,8 +592,33 @@ router.get("/api/search-flights", (req, res) => {
     res.status(500).json({ error: "Failed to fetch flights." });
   }
 });
-router.post("/api/passenger-details", (req, res) => {
-  
+router.post("/api/passenger-details", async (req, res) => {
+  const { firstName, middleName, lastName, contactNo, dob, userId, flight_id } = req.body;
+
+  try {
+    const query = `
+  INSERT INTO PASSENGER_PROFILE(user_id,flight_id,f_name,m_name,l_name,mobile,dob) VALUES (?, ?, ?, ?, ?,?,?)
+  `;
+    db.query(query, [
+      userId,
+      flight_id,
+      firstName,
+      middleName,
+      lastName,
+      contactNo,
+      dob,
+    ], (err, result) => {
+      if (err) {
+        console.error("Error inserting passenger details:", err);
+        return res.status(500).json({ error: "Failed to insert passenger details" });
+      }
+      
+      res.status(201).json({ message: "Passenger details added successfully!" });
+    });
+  } catch (error) {
+    console.error("Error fetching :", error);
+    res.status(500).json({ error: "Failed to fetch " });
+  }
 });
 
 module.exports = router;

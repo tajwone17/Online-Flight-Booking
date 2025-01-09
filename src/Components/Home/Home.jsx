@@ -87,7 +87,7 @@ const Home = () => {
 
   const handleSearch = () => {
     const updatedFormData = { ...formData, passengers: value };
-    navigate('/searchResults', { state: updatedFormData });
+    navigate("/searchResults", { state: updatedFormData });
   };
 
   return (

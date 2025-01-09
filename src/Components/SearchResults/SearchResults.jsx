@@ -21,7 +21,7 @@ const SearchResults = () => {
             params: searchData,
           }
         );
-        console.log(response.data)
+        console.log(response.data);
         setFlights(response.data.flights);
         setLoading(false);
       } catch (error) {
@@ -33,11 +33,14 @@ const SearchResults = () => {
     fetchFlights();
   }, [searchData]);
 
-  const handleBuyClick = () => {
+  const handleBuyClick = (fid) => {
     if (!isLoggedIn) {
       navigate("/login");
     } else {
-      navigate("/passenger-details");
+      {
+        const flight_id = fid;
+        navigate("/passenger-details", { state: flight_id });
+      }
     }
   };
 
@@ -62,7 +65,7 @@ const SearchResults = () => {
             </thead>
             <tbody>
               {flights.map((flight, index) => (
-                <tr key={index}>
+                <tr key={flight.flight_id}>
                   <td>{flight.airline}</td>
                   <td>{new Date(flight.departure).toLocaleString()}</td>
                   <td>{new Date(flight.arrivale).toLocaleString()}</td>
@@ -70,7 +73,7 @@ const SearchResults = () => {
                   <td>
                     <button
                       className="btn btn-success"
-                      onClick={handleBuyClick}
+                      onClick={()=>handleBuyClick(flight.flight_id)}
                     >
                       Buy
                     </button>
