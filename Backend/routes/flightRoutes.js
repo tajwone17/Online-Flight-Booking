@@ -405,7 +405,7 @@ router.get("/api/user-flights", async (req, res) => {
           JOIN passenger_profile p ON f.flight_id = p.flight_id
           WHERE p.user_id = ?;
       `;
-    console.log("Executing query:", query, "with params:", [userId]);
+   
 
     db.query(query, [userId], (err, results) => {
       if (err) {
@@ -415,7 +415,7 @@ router.get("/api/user-flights", async (req, res) => {
           .json({ error: "Failed to fetch flight details" });
       }
 
-      console.log("Query results:", results);
+   
       res.json(results);
     });
   } catch (error) {
@@ -457,7 +457,7 @@ router.get("/api/tickets", (req, res) => {
       console.error("Error fetching tickets:", err);
       return res.status(500).json({ error: "Error fetching tickets" });
     }
-    console.log("Tickets fetched successfully:", results);
+    
     res.status(200).json({ tickets: results });
   });
 });
