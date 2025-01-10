@@ -3,10 +3,11 @@ import "./AddFlight.css";
 import axios from "axios";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  
+
 const AddFlight = () => {
   const [cities, setCities] = useState([]);
   const [airlines, setAirlines] = useState([]);
-
+  
   const [formData, setFormData] = useState({
     sourceDate: "",
     sourceTime: "",
@@ -16,9 +17,9 @@ const AddFlight = () => {
     arrCity: "",
     dura: "",
     Bprice: "",
-    Eprice:"",
+    Eprice: "",
     airlineName: "",
-    // seats: "",  // New field for seats
+    gate: "",  // New field for gate
   });
 
   const [errors, setErrors] = useState({});  
@@ -46,7 +47,6 @@ const AddFlight = () => {
   const validateForm = () => {
     let formErrors = {};
     let isValid = true;
-  
   
     const departureDateTime = new Date(`${formData.sourceDate}T${formData.sourceTime}`);
     const arrivalDateTime = new Date(`${formData.destDate}T${formData.destTime}`);
@@ -82,7 +82,13 @@ const AddFlight = () => {
       formErrors.dura = "Duration must be between 30 minutes and 24 hours.";
       isValid = false;
     }
-  
+
+    // Validate Gate (Optional)
+    if (!formData.gate.trim()) {
+      formErrors.gate = "Gate is required.";
+      isValid = false;
+    }
+
     setErrors(formErrors);
     return isValid;
   };
@@ -95,7 +101,6 @@ const AddFlight = () => {
       return;  // Don't submit the form if validation fails
     }
 
-    // Add adminId here, could come from authentication context, session, etc.
     const adminId = 1;  // Example: Replace with the actual admin ID dynamically
 
     const formDataWithAdmin = {
@@ -130,7 +135,7 @@ const AddFlight = () => {
           Bprice: "",
           Eprice: "",
           airlineName: "",
-          // seats: "",
+          gate: "",  // Clear gate as well
         });
       }
     } catch (error) {
@@ -247,7 +252,7 @@ const AddFlight = () => {
               onChange={handleChange}
               required
             />
-            {errors.price && <p className="error-text">{errors.price}</p>}
+            {errors.Bprice && <p className="error-text">{errors.Bprice}</p>}
           </div>
           <div className="col">
             <input
@@ -259,7 +264,7 @@ const AddFlight = () => {
               required
               min="1"
             />
-            {errors.E && <p className="error-text">{errors.seats}</p>}
+            {errors.Eprice && <p className="error-text">{errors.Eprice}</p>}
           </div>
         </div>
 
@@ -284,12 +289,26 @@ const AddFlight = () => {
           </div>
         </div>
 
+        {/* Gate Section */}
+        <div className="form-row">
+          <div className="col">
+            <input
+              placeholder="Gate"
+              type="text"
+              name="gate"
+              value={formData.gate}
+              onChange={handleChange}
+              required
+            />
+            {errors.gate && <p className="error-text">{errors.gate}</p>}
+          </div>
+        </div>
+
         <button type="submit" className="btn-submit">
           <i className="fa fa-arrow-right"></i> Proceed
         </button>
       </form>
 
-      {/* ToastContainer to display the toast notifications */}
       <ToastContainer />
     </div>
   );

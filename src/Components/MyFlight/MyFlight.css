@@ -75,12 +75,12 @@
     width: 100%;
 }
 
-.flight-timeline .fa-plane {
+/* .flight-timeline .fa-plane {
     color: green;
     font-size: 1.5em;
     position: absolute;
     right: 5px;
-}
+} */
 
 /* Status button styling */
 .status {
@@ -102,7 +102,7 @@
     justify-content: center; 
     margin-right: 20px;
 }
-.status.Not.yet.departed{
+.status.not-yet-departed{
     background-color: #d4edda;
     color: #155724;
     width: 150px;

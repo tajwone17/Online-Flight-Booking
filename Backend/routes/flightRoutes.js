@@ -16,6 +16,7 @@ router.post("/api/add-flight", (req, res) => {
     Eprice,
     airlineName,
     adminId,
+    gate,
   } = req.body;
 
   if (!adminId) {
@@ -59,8 +60,8 @@ router.post("/api/add-flight", (req, res) => {
       // Step 4: Insert the new flight data
       const insertFlightQuery = `
         INSERT INTO flight (admin_id, departure, arrivale, source, destination, duration, BusPrice,
-      EcoPrice, seats, airline, eco_seats)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      EcoPrice, seats, airline, eco_seats,gate)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
       `;
 
       db.query(
@@ -76,7 +77,8 @@ router.post("/api/add-flight", (req, res) => {
           Eprice,
           seats,
           airlineName,
-          eco_seats, // Insert calculated eco_seats
+          eco_seats,
+          gate, // Insert calculated eco_seats
         ],
         (err, result) => {
           if (err) {
@@ -436,7 +438,7 @@ router.get("/api/tickets", (req, res) => {
       f.airline,
       t.seat_no,
       t.class,
-      f.GATE,
+      f.gate,
       p.f_name,
       p.m_name,
       p.l_name
@@ -655,32 +657,49 @@ router.post("/api/payment-details", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch " });
   }
 });
-
 router.post("/api/ticket", async (req, res) => {
   const { userId, flight_id, fare, passenger_id, f_class, seat_no } = req.body;
-  console.log('Received data:', req.body);
-  try {
-    const query = `
-  INSERT INTO ticket( passenger_id,flight_id,user_id, seat_no,cost,class) VALUES (?, ?, ?, ?, ?,?)
-  `;
-    db.query(
-      query,
-      [passenger_id, flight_id, userId, seat_no, fare, f_class],
-      (err, result) => {
-        if (err) {
-          console.error("Error inserting ticket", err);
-          return res
-            .status(500)
-            .json({ error: "Failed to insert ticket details" });
-        }
 
-        res.status(201).json({ message: "ticket details added successfully!" });
+  const seatClassColumn = f_class === "B" ? "bus_seats" : "eco_seats";
+
+  try {
+    // Update the seat count
+    const seatUpdateQuery = `
+      UPDATE flight 
+      SET ${seatClassColumn} = ${seatClassColumn} - 1, seats = seats - 1
+      WHERE flight_id = ?
+    `;
+
+    db.query(seatUpdateQuery, [flight_id], (updateSeatErr) => {
+      if (updateSeatErr) {
+        console.error("Error updating seat count:", updateSeatErr);
+        return res.status(500).json({ error: "Failed to update seat count." });
       }
-    );
+
+      // Insert the ticket details
+      const query = `
+        INSERT INTO ticket(passenger_id, flight_id, user_id, seat_no, cost, class) 
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+      
+      db.query(
+        query,
+        [passenger_id, flight_id, userId, seat_no, fare, f_class],
+        (err, result) => {
+          if (err) {
+            console.error("Error inserting ticket", err);
+            return res.status(500).json({ error: "Failed to insert ticket details" });
+          }
+
+          res.status(201).json({ message: "Ticket details added successfully!" });
+        }
+      );
+    });
   } catch (error) {
-    console.error("Error fetching :", error);
-    res.status(500).json({ error: "Failed to fetch " });
+    console.error("Error processing ticket:", error);
+    res.status(500).json({ error: "Failed to process the ticket." });
   }
 });
+
 
 module.exports = router;

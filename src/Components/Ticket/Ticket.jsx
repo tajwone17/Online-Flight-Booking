@@ -103,7 +103,7 @@ const TicketComponent = () => {
           f_name,
           m_name,
           l_name,
-          GATE,
+          gate,
           class: classTxt,
         } = ticket;
         const departureDateTime = new Date(departure);
@@ -174,7 +174,7 @@ const TicketComponent = () => {
                 </div>
                 <div className="col-3">
                   <p className="head">Gate</p>
-                  <p className="txt">{GATE}</p>
+                  <p className="txt">{gate}</p>
                 </div>
                 <div className="col-3">
                   <p className="head">Seat</p>
