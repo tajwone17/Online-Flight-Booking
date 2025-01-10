@@ -32,7 +32,7 @@ const MyFlight = () => {
     
         fetchFlights();
     }, []);
-    
+
     const getStatus = (departure, arrival) => {
         const now = new Date();
         const departureTime = new Date(departure);
@@ -56,32 +56,35 @@ const MyFlight = () => {
             {flights.length === 0 ? (
                 <div className="flight-status-card "><strong>No flights found.</strong></div>
             ) : (
-                flights.map((flight) => (
-                    <div key={flight.flight_id} className="flight-status-card">
-                        <div className="flight-details">
-                            <div className="flight-location">
-                                <h3>{flight.source}</h3>
-                                <p>Scheduled Departure:</p>
-                                <strong>{new Date(flight.departure).toLocaleDateString()}</strong>
-                                <span>{new Date(flight.departure).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                            </div>
-                            <div className="flight-timeline">
-                                <span className="dot"></span>
-                                <hr />
-                                <i className="fa fa-plane"></i>
-                            </div>
-                            <div className="flight-location">
-                                <h3>{flight.Destination}</h3>
-                                <p>Scheduled Arrival:</p>
-                                <strong>{new Date(flight.arrivale).toLocaleDateString()}</strong>
-                                <span>{new Date(flight.arrivale).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                            </div>
-                            <div className={`status ${getStatus(flight.departure, flight.arrivale).toLowerCase().replace(/ /g, '-')}`}>
-                                {getStatus(flight.departure, flight.arrivale)}
+                flights.map((flight) => {
+                    const status = getStatus(flight.departure, flight.arrivale).toLowerCase().replace(/ /g, '-');
+                    return (
+                        <div key={flight.flight_id} className="flight-status-card">
+                            <div className="flight-details">
+                                <div className="flight-location">
+                                    <h3>{flight.source}</h3>
+                                    <p>Scheduled Departure:</p>
+                                    <strong>{new Date(flight.departure).toLocaleDateString()}</strong>
+                                    <span>{new Date(flight.departure).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                </div>
+                                <div className={`flight-timeline ${status}`}>
+                                    <span className="dot"></span>
+                                    <hr />
+                                    <i className="fa fa-plane"></i>
+                                </div>
+                                <div className="flight-location">
+                                    <h3>{flight.Destination}</h3>
+                                    <p>Scheduled Arrival:</p>
+                                    <strong>{new Date(flight.arrivale).toLocaleDateString()}</strong>
+                                    <span>{new Date(flight.arrivale).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                </div>
+                                <div className={`status ${status}`}>
+                                    {getStatus(flight.departure, flight.arrivale)}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))
+                    );
+                })
             )}
         </div>
     );

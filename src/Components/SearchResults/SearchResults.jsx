@@ -11,6 +11,7 @@ const SearchResults = () => {
   const searchData = location.state || {};
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(true);
+ const f_class=searchData.f_class;
 
   useEffect(() => {
     const fetchFlights = async () => {
@@ -33,14 +34,11 @@ const SearchResults = () => {
     fetchFlights();
   }, [searchData]);
 
-  const handleBuyClick = (fid) => {
+  const handleBuyClick = (fid, fare) => {
     if (!isLoggedIn) {
       navigate("/login");
     } else {
-      {
-        const flight_id = fid;
-        navigate("/passenger-details", { state: flight_id });
-      }
+      navigate("/passenger-details", { state: { flight_id: fid, fare: fare, f_class: f_class } });
     }
   };
 
@@ -64,22 +62,29 @@ const SearchResults = () => {
               </tr>
             </thead>
             <tbody>
-              {flights.map((flight, index) => (
-                <tr key={flight.flight_id}>
-                  <td>{flight.airline}</td>
-                  <td>{new Date(flight.departure).toLocaleString()}</td>
-                  <td>{new Date(flight.arrivale).toLocaleString()}</td>
-                  <td>${flight.fare * searchData.passengers}</td>
-                  <td>
-                    <button
-                      className="btn btn-success"
-                      onClick={()=>handleBuyClick(flight.flight_id)}
-                    >
-                      Buy
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {flights.map((flight) => {
+                const departureDate = new Date(flight.departure);
+                const isPast = departureDate < new Date();
+                return (
+                  <tr key={flight.flight_id}>
+                    <td>{flight.airline}</td>
+                    <td>{departureDate.toLocaleString()}</td>
+                    <td>{new Date(flight.arrivale).toLocaleString()}</td>
+                    <td>${flight.fare}</td>
+                    <td>
+                      <button
+                        className="btn btn-success"
+                        onClick={() =>
+                          handleBuyClick(flight.flight_id, flight.fare)
+                        }
+                        disabled={isPast}
+                      >
+                        {isPast ? "Unavailable" : "Buy"}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

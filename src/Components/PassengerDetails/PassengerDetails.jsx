@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const PassengerDetails = () => {
   const location = useLocation();
-  const fID = location.state || {};
+  const { flight_id, fare , f_class} = location.state || {};
+
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
@@ -34,7 +36,7 @@ const PassengerDetails = () => {
   };
   const handleProceed = () => {
     const updatedFormData = { ...formData };
-    navigate("/payment-form", { state: { passengerData: updatedFormData, flight_id: fID } });
+    navigate("/payment-form", { state: { passengerData: updatedFormData, flight_id: flight_id ,fare:fare, f_class: f_class} });
 
   };
   return (

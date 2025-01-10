@@ -546,10 +546,10 @@ router.post("/api/feedback", async (req, res) => {
   }
 });
 router.get("/api/search-flights", (req, res) => {
-  const { dep_city, arr_city, dep_date, f_class, passengers } = req.query;
+  const { dep_city, arr_city, dep_date, f_class } = req.query;
 
   try {
-    if (!dep_city || !arr_city || !dep_date || !f_class || !passengers) {
+    if (!dep_city || !arr_city || !dep_date || !f_class) {
       return res.status(400).json({ error: "All fields are required." });
     }
     const query = `
@@ -571,13 +571,13 @@ router.get("/api/search-flights", (req, res) => {
       AND f.destination = ? 
       AND DATE(f.departure) = ? 
       
-      AND f.seats >= ? 
+      AND f.seats >= 1 
     ORDER BY 
       f.departure ASC;
     `;
     db.query(
       query,
-      [f_class, f_class, dep_city, arr_city, dep_date, passengers],
+      [f_class, f_class, dep_city, arr_city, dep_date],
       (err, results) => {
         if (err) {
           console.error("Error fetching flights:", err);
@@ -593,28 +593,90 @@ router.get("/api/search-flights", (req, res) => {
   }
 });
 router.post("/api/passenger-details", async (req, res) => {
-  const { firstName, middleName, lastName, contactNo, dob, userId, flight_id } = req.body;
+  const { firstName, middleName, lastName, contactNo, dob, userId, flight_id } =
+    req.body;
 
   try {
     const query = `
-  INSERT INTO PASSENGER_PROFILE(user_id,flight_id,f_name,m_name,l_name,mobile,dob) VALUES (?, ?, ?, ?, ?,?,?)
-  `;
-    db.query(query, [
-      userId,
-      flight_id,
-      firstName,
-      middleName,
-      lastName,
-      contactNo,
-      dob,
-    ], (err, result) => {
-      if (err) {
-        console.error("Error inserting passenger details:", err);
-        return res.status(500).json({ error: "Failed to insert passenger details" });
+      INSERT INTO PASSENGER_PROFILE(user_id, flight_id, f_name, m_name, l_name, mobile, dob) 
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+      query,
+      [userId, flight_id, firstName, middleName, lastName, contactNo, dob],
+      (err, result) => {
+        if (err) {
+          console.error("Error inserting passenger details:", err);
+          return res
+            .status(500)
+            .json({ error: "Failed to insert passenger details" });
+        }
+
+        const passenger_id = result.insertId; // Getting the auto-incremented passenger_id
+        // Send response only once, including both the passenger_id and success message
+        res.status(201).json({
+          message: "Passenger details added successfully!",
+          passenger_id,
+        });
       }
-      
-      res.status(201).json({ message: "Passenger details added successfully!" });
-    });
+    );
+  } catch (error) {
+    console.error("Error fetching:", error);
+    res.status(500).json({ error: "Failed to process request" });
+  }
+});
+
+router.post("/api/payment-details", async (req, res) => {
+  const { exp, fare, cardNumber, userId, flight_id } = req.body;
+
+  try {
+    const query = `
+  INSERT INTO payment(user_id,flight_id,card_no,expire_date,amount) VALUES (?, ?, ?, ?, ?)
+  `;
+    db.query(
+      query,
+      [userId, flight_id, cardNumber, exp, fare],
+      (err, result) => {
+        if (err) {
+          console.error("Error inserting payment details:", err);
+          return res
+            .status(500)
+            .json({ error: "Failed to insert payment details" });
+        }
+
+        res
+          .status(201)
+          .json({ message: "payment details added successfully!" });
+      }
+    );
+  } catch (error) {
+    console.error("Error fetching :", error);
+    res.status(500).json({ error: "Failed to fetch " });
+  }
+});
+
+router.post("/api/ticket", async (req, res) => {
+  const { userId, flight_id, fare, passenger_id, f_class, seat_no } = req.body;
+  console.log('Received data:', req.body);
+  try {
+    const query = `
+  INSERT INTO ticket( passenger_id,flight_id,user_id, seat_no,cost,class) VALUES (?, ?, ?, ?, ?,?)
+  `;
+    db.query(
+      query,
+      [passenger_id, flight_id, userId, seat_no, fare, f_class],
+      (err, result) => {
+        if (err) {
+          console.error("Error inserting ticket", err);
+          return res
+            .status(500)
+            .json({ error: "Failed to insert ticket details" });
+        }
+
+        res.status(201).json({ message: "ticket details added successfully!" });
+      }
+    );
   } catch (error) {
     console.error("Error fetching :", error);
     res.status(500).json({ error: "Failed to fetch " });

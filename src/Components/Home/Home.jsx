@@ -17,10 +17,10 @@ const Home = () => {
     dep_date: "",
    
     f_class: "E",
-    passengers: 0,
+ 
   });
 
-  const [value, setValue] = useState(0); // Track the number of passengers
+ 
   const navigate = useNavigate();
   const [errors, setErrors] = useState({}); // Track errors
 
@@ -36,8 +36,6 @@ const Home = () => {
     fetchCities();
   }, []);
 
-  const handlePlus = () => setValue(value + 1);
-  const handleMinus = () => value > 0 && setValue(value - 1);
 
 
 
@@ -66,10 +64,7 @@ const Home = () => {
       isValid = false;
     }
 
-    if (value < 1) {
-      formErrors.passengers = "At least one passenger is required.";
-      isValid = false;
-    }
+  
 
     setErrors(formErrors);
     return isValid;
@@ -86,7 +81,7 @@ const Home = () => {
   };
 
   const handleSearch = () => {
-    const updatedFormData = { ...formData, passengers: value };
+    const updatedFormData = { ...formData };
     navigate("/searchResults", { state: updatedFormData });
   };
 
@@ -184,7 +179,7 @@ const Home = () => {
                 </div>
 
                 {/* Number of Passengers */}
-                <div className="form-row">
+                {/* <div className="form-row">
                   <div className="col passenger">
                     <h3>Passenger</h3>
                     <div className="quantity">
@@ -198,7 +193,7 @@ const Home = () => {
                     </div>
                     {errors.passengers && <p className="error-text">{errors.passengers}</p>}
                   </div>
-                </div>
+                </div> */}
 
                 <div className="form-row">
                   <div className="col">

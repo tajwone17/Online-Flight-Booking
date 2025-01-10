@@ -102,6 +102,28 @@
     justify-content: center; 
     margin-right: 20px;
 }
+.status.Not.yet.departed{
+    background-color: #d4edda;
+    color: #155724;
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    margin-right: 20px;
+}
+.status.departed{
+    background-color: #d4edda;
+    color: #155724;
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    margin-right: 20px;
+}
 
 .status.delayed {
     background-color: #f8d7da;
@@ -114,4 +136,45 @@
 }
 .flight-status-card {
     margin-bottom: 20px; 
+}
+/* Timeline Styling */
+.flight-timeline {
+    position: relative;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flight-timeline .dot {
+    height: 10px;
+    width: 10px;
+    background-color: green;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.flight-timeline hr {
+    border: 1px solid green;
+    width: 100%;
+}
+
+.flight-timeline .fa-plane {
+    color: green;
+    font-size: 1.5em;
+    position: absolute;
+}
+
+/* Dynamic positioning */
+.flight-timeline.not-yet-departed .fa-plane {
+    left: 0; /* Place at the start */
+}
+
+.flight-timeline.departed .fa-plane {
+    left: 50%; /* Place in the middle */
+    transform: translateX(-50%);
+}
+
+.flight-timeline.arrived .fa-plane {
+    right: 0; /* Place at the end */
 }
