@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./AddFlight.css";
 import axios from "axios";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';  
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddFlight = () => {
   const [cities, setCities] = useState([]);
@@ -15,21 +15,20 @@ const AddFlight = () => {
     destTime: "",
     depCity: "",
     arrCity: "",
-    dura: "",
     Bprice: "",
     Eprice: "",
     airlineName: "",
-    gate: "",  // New field for gate
+    gate: "",
   });
 
-  const [errors, setErrors] = useState({});  
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchCitiesAndAirlines = async () => {
       try {
         const cityResponse = await axios.get("http://localhost:3001/api/cities");
         setCities(cityResponse.data.cities);
-        
+
         const airlineResponse = await axios.get("http://localhost:3001/api/airlines");
         setAirlines(airlineResponse.data.airlines);
       } catch (error) {
@@ -47,65 +46,68 @@ const AddFlight = () => {
   const validateForm = () => {
     let formErrors = {};
     let isValid = true;
-  
+
     const departureDateTime = new Date(`${formData.sourceDate}T${formData.sourceTime}`);
     const arrivalDateTime = new Date(`${formData.destDate}T${formData.destTime}`);
-  
+    const timeDifference = (arrivalDateTime - departureDateTime) / (1000 * 60 * 60); // Difference in hours
+
     if (departureDateTime >= arrivalDateTime) {
       formErrors.dateTime = "Departure time must be earlier than the arrival time.";
       isValid = false;
+    } else if (timeDifference > 24) {
+      formErrors.dateTime = "The time difference between departure and arrival cannot exceed 24 hours.";
+      isValid = false;
     }
-  
-    // Validate cities
+
     if (formData.depCity === formData.arrCity) {
       formErrors.city = "Departure and Arrival cities cannot be the same.";
       isValid = false;
     }
-  
-    // Validate Business Class price
+
     const bPrice = parseFloat(formData.Bprice);
-    if (isNaN(bPrice) || bPrice <= 0 || bPrice > 10000 && ePrice>bPrice) {
+    const ePrice = parseFloat(formData.Eprice);
+    if (isNaN(bPrice) || bPrice <= 0 || bPrice > 10000) {
       formErrors.Bprice = "Business Class Price must be a positive number between $1 and $10,000.";
       isValid = false;
     }
-  
-    // Validate Economy Class price
-    const ePrice = parseFloat(formData.Eprice);
-    if (isNaN(ePrice) || ePrice <= 0 || ePrice > 10000 && ePrice<bPrice) {
+    if (isNaN(ePrice) || ePrice <= 0 || ePrice > 10000) {
       formErrors.Eprice = "Economy Class Price must be a positive number between $1 and $10,000.";
       isValid = false;
     }
-  
-    // Validate flight duration
-    const duration = parseInt(formData.dura);
-    if (isNaN(duration) || duration < 30 || duration > 1440) {
-      formErrors.dura = "Duration must be between 30 minutes and 24 hours.";
+    if (ePrice > bPrice) {
+      formErrors.pricing = "Economy Class Price cannot exceed Business Class Price.";
       isValid = false;
     }
 
-    // Validate Gate (Optional)
-    if (!formData.gate.trim()) {
-      formErrors.gate = "Gate is required.";
+    const gatePattern = /^\d+[A-Z]$/;
+    if (!gatePattern.test(formData.gate)) {
+      formErrors.gate = "Gate must follow the format like '2A'.";
       isValid = false;
     }
 
     setErrors(formErrors);
     return isValid;
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error("Please fix the errors before submitting!");  // Error toast
-      return;  // Don't submit the form if validation fails
+      toast.error("Please fix the errors before submitting!");
+      return;
     }
 
-    const adminId = 1;  // Example: Replace with the actual admin ID dynamically
+    const adminId = 1;
+
+    // Calculate duration in minutes
+    const departureDateTime = new Date(`${formData.sourceDate}T${formData.sourceTime}`);
+    const arrivalDateTime = new Date(`${formData.destDate}T${formData.destTime}`);
+    const dura = Math.floor((arrivalDateTime - departureDateTime) / (1000 * 60)); // Duration in minutes
 
     const formDataWithAdmin = {
       ...formData,
-      adminId,  // Include the adminId in the request body
+      adminId,
+      dura, // Add calculated duration to the payload
     };
 
     try {
@@ -118,12 +120,10 @@ const AddFlight = () => {
           },
         }
       );
-      
-      if (response.status === 201) {
-        console.log("Flight Added:", response.data);
-        toast.success("Flight added successfully!");  // Success toast
 
-        // Clear form fields after successful submission
+      if (response.status === 201) {
+        toast.success("Flight added successfully!");
+
         setFormData({
           sourceDate: "",
           sourceTime: "",
@@ -131,18 +131,19 @@ const AddFlight = () => {
           destTime: "",
           depCity: "",
           arrCity: "",
-          dura: "",
           Bprice: "",
           Eprice: "",
           airlineName: "",
-          gate: "",  // Clear gate as well
+          gate: "",
         });
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Error submitting form. Please try again.");  // Error toast
+      toast.error("Error submitting form. Please try again.");
     }
   };
+
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <div className="add-flight-container">
@@ -159,6 +160,7 @@ const AddFlight = () => {
               value={formData.sourceDate}
               onChange={handleChange}
               required
+              min={today}
             />
             <input
               type="time"
@@ -180,6 +182,7 @@ const AddFlight = () => {
               value={formData.destDate}
               onChange={handleChange}
               required
+              min={today}
             />
             <input
               type="time"
@@ -230,22 +233,11 @@ const AddFlight = () => {
           </div>
         </div>
 
-        {/* Duration, Price, and Seats Section */}
+        {/* Price and Gate Section */}
         <div className="form-row">
           <div className="col">
             <input
-              placeholder="Duration (minutes)"
-              type="number"
-              name="dura"
-              value={formData.dura}
-              onChange={handleChange}
-              required
-            />
-            {errors.dura && <p className="error-text">{errors.dura}</p>}
-          </div>
-          <div className="col">
-            <input
-              placeholder=" Business Class Price ($)"
+              placeholder="Business Class Price ($)"
               type="number"
               name="Bprice"
               value={formData.Bprice}
@@ -262,9 +254,19 @@ const AddFlight = () => {
               value={formData.Eprice}
               onChange={handleChange}
               required
-              min="1"
             />
             {errors.Eprice && <p className="error-text">{errors.Eprice}</p>}
+          </div>
+          <div className="col">
+            <input
+              placeholder="Gate"
+              type="text"
+              name="gate"
+              value={formData.gate}
+              onChange={handleChange}
+              required
+            />
+            {errors.gate && <p className="error-text">{errors.gate}</p>}
           </div>
         </div>
 
@@ -286,21 +288,6 @@ const AddFlight = () => {
                 </option>
               ))}
             </select>
-          </div>
-        </div>
-
-        {/* Gate Section */}
-        <div className="form-row">
-          <div className="col">
-            <input
-              placeholder="Gate"
-              type="text"
-              name="gate"
-              value={formData.gate}
-              onChange={handleChange}
-              required
-            />
-            {errors.gate && <p className="error-text">{errors.gate}</p>}
           </div>
         </div>
 

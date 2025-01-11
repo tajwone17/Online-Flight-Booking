@@ -104,7 +104,7 @@ const FlightList = () => {
                 <td>{flight.source}</td>
                 <td>{flight.Destination}</td>
                 <td>{flight.airline}</td>
-                <td>{flight.Seats}</td>
+                <td>{flight.seats}</td>
                 <td>${flight.BusPrice}</td>
                 <td>${flight.EcoPrice}</td>
                 <td>
