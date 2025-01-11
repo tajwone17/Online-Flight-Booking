@@ -63,7 +63,7 @@ const Register = () => {
         <h2 className="user-register-title">User Registration</h2>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <label htmlFor="username">Username</label>
+            <label className="un" htmlFor="username">Username</label>
             <div className="input-icon">
               <i className="fa fa-user"></i>
               <input
@@ -77,7 +77,7 @@ const Register = () => {
             {errors.username && <p className="error-text">{errors.username}</p>}
           </div>
           <div className="input-group">
-            <label htmlFor="email">Email</label>
+            <label className="ml" htmlFor="email">Email</label>
             <div className="input-icon">
               <i className="fa fa-envelope"></i>
               <input
@@ -91,7 +91,7 @@ const Register = () => {
             {errors.email && <p className="error-text">{errors.email}</p>}
           </div>
           <div className="input-group">
-            <label htmlFor="password">Password</label>
+            <label className="ps" htmlFor="password">Password</label>
             <div className="input-icon">
               <i className="fa fa-lock"></i>
               <input

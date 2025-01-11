@@ -1,12 +1,13 @@
 /* UserRegister.css */
 
 .user-register-container {
+    
+    height: 90vh;
+    
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    
-    background-color: #2e3b4e; /* Dark background color */
+     /* Dark background color */
 }
 
 .user-register-box {
@@ -15,7 +16,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow for better depth */
     text-align: center;
-    width: 450px; /* Increased width */
+    width: 550px; /* Increased width */
     max-width: 90%; /* Ensure responsiveness */
 }
 
@@ -80,4 +81,13 @@
 
 .register-button:hover {
     background-color: #2980b9; /* Darker shade on hover */
+}
+.ml{
+    margin-right: 100px;
+}
+.ps{
+    margin-right:70px;
+}
+.un{
+    margin-right:68px;
 }
