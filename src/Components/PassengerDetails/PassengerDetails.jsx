@@ -39,6 +39,7 @@ const PassengerDetails = () => {
     navigate("/payment-form", { state: { passengerData: updatedFormData, flight_id: flight_id ,fare:fare, f_class: f_class} });
 
   };
+  const today = new Date().toISOString().split("T")[0];
   return (
     <div className="container my-5 d-flex justify-content-center">
       <div
@@ -132,6 +133,7 @@ const PassengerDetails = () => {
                 value={formData.dob}
                 onChange={handleChange}
                 style={{ height: "45px" }}
+                max={today}
               />
             </div>
           </div>

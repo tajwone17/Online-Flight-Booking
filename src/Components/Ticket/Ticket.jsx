@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 import "./Ticket.css";
 import airtic from "../../Assets/Images/airtic.png";
 
@@ -76,10 +77,10 @@ const TicketComponent = () => {
           prevTickets.filter((ticket) => ticket.ticket_id !== ticketId)
         );
 
-        alert("Ticket successfully canceled.");
+        toast.success("Ticket successfully canceled.");
       } catch (error) {
         console.error("Error canceling ticket:", error);
-        alert("An error occurred while canceling the ticket. Please try again.");
+        toast.error("An error occurred while canceling the ticket. Please try again.");
       }
     }
   };
@@ -246,6 +247,7 @@ const TicketComponent = () => {
           </div>
         );
       })}
+      <ToastContainer />
     </div>
   );
 };
