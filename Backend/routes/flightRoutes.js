@@ -250,7 +250,7 @@ router.put("/api/manage-flight/:id", (req, res) => {
 });
 
 router.get("/api/todays-flights", (req, res) => {
-  const now = new Date().toISOString(); // Capture the current timestamp for debugging
+  
 
   const sql = `
     SELECT flight_id as id, arrivale, departure, destination, source, airline 

@@ -88,7 +88,7 @@ const FlightList = () => {
           <tbody>
             {flights.map((flight) => (
               <tr key={flight.flight_id} className="text-center">
-                <td scope="row">
+                <td >
                   <button onClick={()=>handleNavigate(flight.flight_id)}>
                     {flight.flight_id}
                   </button>

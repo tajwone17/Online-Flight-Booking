@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./SearchResults.css";
-import Footer from "../Footer/Footer";
 
 const SearchResults = () => {
   const navigate = useNavigate();
@@ -11,7 +10,7 @@ const SearchResults = () => {
   const searchData = location.state || {};
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(true);
- const f_class=searchData.f_class;
+  const f_class = searchData.f_class;
 
   useEffect(() => {
     const fetchFlights = async () => {
@@ -38,7 +37,9 @@ const SearchResults = () => {
     if (!isLoggedIn) {
       navigate("/login");
     } else {
-      navigate("/passenger-details", { state: { flight_id: fid, fare: fare, f_class: f_class } });
+      navigate("/passenger-details", {
+        state: { flight_id: fid, fare: fare, f_class: f_class },
+      });
     }
   };
 
