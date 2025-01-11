@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AdminLogin.css';
-import { isLoggedIn } from "../../Constant/isLoggedIn";
+import { isAdminLoggedin } from "../../Constant/isAdminLoggedin";
 const AdminLogin = () => {
   const [user_id, setUserId] = useState('');
   const [password, setPassword] = useState('');
@@ -25,9 +25,9 @@ const AdminLogin = () => {
 
     try {
       const response = await axios.post("http://localhost:3001/auth/admin/login", { user_id, password });
-      const token = response.data.token;
+      const token = response.data.adminToken;
       const admin_uname = response.data.username;
-      localStorage.setItem("token", token);
+      localStorage.setItem("adminToken", token);
       localStorage.setItem("admin_uname", admin_uname); 
       
       navigate('/admin/dashboard'); // Redirect to admin dashboard
@@ -70,7 +70,7 @@ const AdminLogin = () => {
               />
             </div>
           </div>
-          {!isLoggedIn ?  <button type="submit" className="login-button">
+          {!isAdminLoggedin ?  <button type="submit" className="login-button">
             <i className="fa fa-arrow-right"></i> Login
           </button>:
            (

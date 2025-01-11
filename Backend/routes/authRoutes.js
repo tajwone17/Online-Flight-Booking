@@ -83,10 +83,10 @@ router.post("/admin/login", (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const token = generateToken(adminUser.admin_id);
+    const adminToken = generateToken(adminUser.admin_id);
     res.status(200).json({
       message: "Login successful",
-      token,
+      adminToken,
       username: adminUser.admin_uname,
     });
   });

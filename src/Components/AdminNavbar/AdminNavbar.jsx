@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./AdminNavbar.css";
-import { isLoggedIn } from "../../Constant/isLoggedIn";
+import { isAdminLoggedin } from "../../Constant/isAdminLoggedin";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify styles
 import axios from "axios"; // Import Axios
@@ -15,7 +15,7 @@ const AdminNavbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isAdminLoggedin) {
       const storedUsername = localStorage.getItem("admin_uname");
       setUsername(storedUsername);
     }
@@ -71,7 +71,7 @@ const AdminNavbar = () => {
               ADMIN PANEL
             {/* </Link> */}
           </span>
-          {isLoggedIn && (
+          {isAdminLoggedin && (
             <>
               <Link className="admin-nav-link" to="/admin/dashboard">
                 Dashboard
@@ -94,7 +94,7 @@ const AdminNavbar = () => {
         </div>
 
         <div className="admin-navbar-right">
-          {isLoggedIn ? (
+          {isAdminLoggedin ? (
             <>
              {location.pathname === "/admin/manage-airlines" && ( 
                <div className="admin-dropdown">
