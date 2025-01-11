@@ -84,7 +84,7 @@ const Home = () => {
     const updatedFormData = { ...formData };
     navigate("/searchResults", { state: updatedFormData });
   };
-
+  const today = new Date().toISOString().split("T")[0];
   return (
     <>
       <div className="main-agileinfo">
@@ -157,6 +157,7 @@ const Home = () => {
                       type="date"
                       value={formData.dep_date}
                       onChange={handleChange}
+                      min={today}
                       required
                     />
                     {errors.dep_date && <p className="error-text">{errors.dep_date}</p>}
