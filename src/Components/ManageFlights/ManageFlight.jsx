@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "react-router-dom";  // Import for getting flight ID from the URL
 
 const ManageFlight = () => {
-    const { id: flightId } = useParams();   // Extract flight ID from URL parameters
+  const { id: flightId } = useParams();   // Extract flight ID from URL parameters
 
   const [formData, setFormData] = useState({
     sourceDate: "",
@@ -20,6 +20,20 @@ const ManageFlight = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Parse the date and time inputs
+    const departureDateTime = new Date(`${formData.sourceDate}T${formData.sourceTime}`);
+    const arrivalDateTime = new Date(`${formData.destDate}T${formData.destTime}`);
+
+    // Calculate the difference in hours
+    const timeDifference = (arrivalDateTime - departureDateTime) / (1000 * 60 * 60); // Difference in hours
+
+    // Validate that the time difference is less than or equal to 24 hours
+    if (timeDifference > 24) {
+      toast.error("Arrival time must be within 24 hours of departure.");
+      return;
+    }
+
     try {
       const response = await axios.put(
         `http://localhost:3001/api/manage-flight/${flightId}`, // Pass flightId in the URL
@@ -40,6 +54,7 @@ const ManageFlight = () => {
       toast.error("Error updating flight details. Please try again.");
     }
   };
+
   const today = new Date().toISOString().split("T")[0];
   return (
     <div className="add-flight-container">
