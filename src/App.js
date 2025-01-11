@@ -51,7 +51,7 @@ function App() {
                 <Route path="list-flights" element={<ListFlights />} />
                 <Route path="passenger-list/:id" element={<PassengerList />} />
                 <Route path="dashboard/manageFlight/:id" element={<ManageFlight/>} />
-                
+                <Route path="manage-flights/:id" element={<ManageFlight />} />
               </Routes>
               <Footer/>
             </>

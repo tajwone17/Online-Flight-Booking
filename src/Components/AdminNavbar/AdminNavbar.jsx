@@ -82,7 +82,7 @@ const AdminNavbar = () => {
               <Link className="admin-nav-link" to="/admin/list-flights">
                 List Flights
               </Link>
-
+            
               {/* Conditionally render 'Manage Airlines' link */}
              
                 <Link className="admin-nav-link" to="/admin/manage-airlines">

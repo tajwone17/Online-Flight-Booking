@@ -40,7 +40,7 @@ const ManageFlight = () => {
       toast.error("Error updating flight details. Please try again.");
     }
   };
-
+  const today = new Date().toISOString().split("T")[0];
   return (
     <div className="add-flight-container">
       <h1 className="text-center">Manage Flight</h1>
@@ -54,6 +54,7 @@ const ManageFlight = () => {
               name="sourceDate"
               value={formData.sourceDate}
               onChange={handleChange}
+              min={today}
               required
             />
             <input
@@ -75,6 +76,7 @@ const ManageFlight = () => {
               name="destDate"
               value={formData.destDate}
               onChange={handleChange}
+              min={today}
               required
             />
             <input
