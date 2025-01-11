@@ -21,7 +21,7 @@ const SearchResults = () => {
             params: searchData,
           }
         );
-        console.log(response.data);
+      
         setFlights(response.data.flights);
         setLoading(false);
       } catch (error) {

@@ -395,7 +395,7 @@ router.get("/api/arrived-flights", (req, res) => {
 router.get("/api/user-flights", async (req, res) => {
   try {
     const { userId } = req.query;
-    console.log("Received userId:", userId);
+    
 
     if (!userId) {
       return res.status(400).json({ error: "User ID is required" });
@@ -586,7 +586,7 @@ router.get("/api/search-flights", (req, res) => {
           return res.status(500).json({ error: "Failed to fetch flights." });
         }
         res.status(200).json({ flights: results });
-        console.log(results);
+        
       }
     );
   } catch (error) {

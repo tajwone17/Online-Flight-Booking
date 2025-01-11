@@ -25,8 +25,7 @@ const PassengerDetails = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Perform validation or save passenger data if needed
-    console.log("Form data submitted:", formData);
+   
     // After successful form submission, navigate to the payment form
     if (isFormValid) {
       handleProceed();

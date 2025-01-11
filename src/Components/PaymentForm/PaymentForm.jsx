@@ -63,7 +63,7 @@ const PaymentForm = () => {
         }
       );
       passenger_id = response.data.passenger_id;
-      console.log(passenger_id)
+      
     } catch (error) {
       console.error(error);
     }

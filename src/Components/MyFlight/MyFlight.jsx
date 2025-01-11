@@ -20,7 +20,7 @@ const MyFlight = () => {
                     params: { userId },
                 });
     
-                console.log('Flights fetched successfully:', response.data);
+               
                 setFlights(response.data);
             } catch (err) {
                 console.error('Error fetching flights:', err.response || err.message);
