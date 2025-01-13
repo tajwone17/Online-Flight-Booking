@@ -1,9 +1,9 @@
 ````markdown
-# **Online Flight Booking System**
+# **SkyTrip System**
 
 ## **Purpose**
 
-This **Online Flight Booking System** is a comprehensive web application designed to allow users to search, book, and manage flight reservations. The system provides users with the ability to select flights, make secure payments, and receive booking confirmations. Additionally, an **Admin Panel** is included for administrators to manage flight listings, airlines, and other related functionalities.
+This **SkyTrip System** is a comprehensive web application designed to allow users to search, book, and manage flight reservations. The system provides users with the ability to select flights, make secure payments, and receive booking confirmations. Additionally, an **Admin Panel** is included for administrators to manage flight listings, airlines, and other related functionalities.
 
 ---
 

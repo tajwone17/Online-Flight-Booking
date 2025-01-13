@@ -90,7 +90,7 @@ const Home = () => {
       <div className="main-agileinfo">
         <h1 className="text-light brand mt-2">
           <img className="immg" src={airtic} height="105px" width="105px" alt="" />
-          Online Flight Booking
+          SkyTrip
         </h1>
 
         <div className="main">

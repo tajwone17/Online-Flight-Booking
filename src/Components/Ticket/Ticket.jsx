@@ -128,7 +128,7 @@ const TicketComponent = () => {
               <div className="row">
                 <div className="col">
                   <h2 className="text-secondary mb-0 brand h2">
-                    Online Flight Booking
+                    SkyTrip
                   </h2>
                 </div>
                 <div className="col">
@@ -195,7 +195,7 @@ const TicketComponent = () => {
               <div className="row">
                 <div className="col">
                   <h2 className="text-light text-center brand h2">
-                    Online Flight Booking
+                    SkyTrip
                   </h2>
                 </div>
               </div>

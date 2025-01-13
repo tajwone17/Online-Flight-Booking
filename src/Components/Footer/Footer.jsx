@@ -8,7 +8,7 @@ const Footer = () => {
         <em>
           <h5 className="text-light text-center p-0 brand mt-2">
             <img src={airtic} height="40px" width="40px" alt="" />
-            Online Flight Booking
+            SkyTrip
           </h5>
         </em>
         <div className="text-light text-center">
