@@ -123,6 +123,11 @@ This **SkyTrip System** is a comprehensive web application designed to allow use
 3. **Manage Airlines**: Admin can manage airline details by adding, updating, or removing them.
 
 ---
+Resources
+Presentation Slide:https://docs.google.com/presentation/d/1Vxxu7S1OVuszXcVatxM6Y5eDB12fbOsd/edit#slide=id.p1
+
+Project Demo Video:https://drive.google.com/drive/u/1/folders/11sXvvp5Yc0gaCJyfpcCMFqSihyDsKF9a
+
 
 ## **License**
 
