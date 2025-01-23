@@ -127,7 +127,7 @@ This **SkyTrip System** is a comprehensive web application designed to allow use
 
 1. **Presentation Slide**:https://docs.google.com/presentation/d/1Vxxu7S1OVuszXcVatxM6Y5eDB12fbOsd/edit#slide=id.p1
 
-2. **Project Demo Video**:https://drive.google.com/drive/u/1/folders/11sXvvp5Yc0gaCJyfpcCMFqSihyDsKF9a
+2. **Project Demo Video**:https://drive.google.com/file/d/1Mugk_ohRs-ZIVLUzUB197BVAMCPAxrjT/view?usp=drive_link
 
 
 ## **License**
